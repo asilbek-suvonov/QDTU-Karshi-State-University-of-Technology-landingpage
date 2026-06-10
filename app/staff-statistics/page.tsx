@@ -5,7 +5,7 @@ export default function Page() {
     <div className="container mx-auto px-4 py-20 min-h-screen">
       <h1 className="text-4xl font-bold uppercase tracking-tighter mb-8">Staff Statistics</h1>
       <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
-        This is the Staff Statistics section of our University platform. We provide comprehensive data and resources for students and staff.
+        Statistical data regarding university staff.
       </p>
     </div>
   );
