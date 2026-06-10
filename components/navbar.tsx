@@ -15,40 +15,17 @@ import {
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
 import { useTheme } from "next-themes"
 
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "History",
-    href: "/about/history",
-    description: "Learn about our long-standing traditions and founding.",
-  },
-  {
-    title: "Mission",
-    href: "/about/mission",
-    description: "Our commitment to excellence and future goals.",
-  },
-  {
-    title: "Leadership",
-    href: "/about/leadership",
-    description: "Meet the people guiding our university.",
-  },
+const directoryLinks = [
+  { title: "Faculty", href: "/directory/faculty", description: "Browse our academic faculty members." },
+  { title: "Staff", href: "/directory/staff", description: "View university administrative and support staff." },
 ]
 
-const academics: { title: string; href: string; description: string }[] = [
-  {
-    title: "Faculties",
-    href: "/academics/faculties",
-    description: "Diverse fields of study and world-class departments.",
-  },
-  {
-    title: "Programs",
-    href: "/academics/programs",
-    description: "Undergraduate and graduate degrees.",
-  },
-  {
-    title: "Admissions",
-    href: "/academics/admissions",
-    description: "How to join our vibrant academic community.",
-  },
+const academicLinks = [
+  { title: "Research", href: "/academic/research", description: "Ongoing and past research initiatives." },
+  { title: "Publications", href: "/academic/publications", description: "Academic journals and papers." },
+  { title: "Controls", href: "/academic/controls", description: "Academic standards and monitoring." },
+  { title: "Consultations", href: "/academic/consultations", description: "Schedule a session with experts." },
+  { title: "Awards", href: "/academic/awards", description: "Honors and recognition in the field." },
 ]
 
 export function Navbar() {
@@ -72,49 +49,45 @@ export function Navbar() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
+              
               <NavigationMenuItem>
-                <NavigationMenuTrigger>About</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Directory</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {components.map((component) => (
+                    {directoryLinks.map((link) => (
                       <ListItem
-                        key={component.title}
-                        title={component.title}
-                        href={component.href}
+                        key={link.title}
+                        title={link.title}
+                        href={link.href}
                       >
-                        {component.description}
+                        {link.description}
                       </ListItem>
                     ))}
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Academics</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Academic</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {academics.map((item) => (
+                    {academicLinks.map((link) => (
                       <ListItem
-                        key={item.title}
-                        title={item.title}
-                        href={item.href}
+                        key={link.title}
+                        title={link.title}
+                        href={link.href}
                       >
-                        {item.description}
+                        {link.description}
                       </ListItem>
                     ))}
                   </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
+
               <NavigationMenuItem>
-                <Link href="/research" legacyBehavior passHref>
+                <Link href="/staff-statistics" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Research
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link href="/contact" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Contact
+                    Statistics
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -122,11 +95,14 @@ export function Navbar() {
           </NavigationMenu>
         </div>
         <div className="flex items-center space-x-4">
-          <AnimatedThemeToggler 
-            theme={theme as "light" | "dark"} 
-            onThemeChange={(t) => setTheme(t)}
-            className="p-2 hover:bg-accent rounded-md transition-colors"
-          />
+          <div className="border-l pl-4 flex items-center h-8">
+            <AnimatedThemeToggler 
+              theme={theme as "light" | "dark"} 
+              onThemeChange={(t) => setTheme(t)}
+              variant="circle"
+              className="p-2 hover:bg-foreground hover:text-background rounded-xs border-2 border-foreground/10 transition-all duration-300"
+            />
+          </div>
         </div>
       </div>
     </header>
@@ -143,13 +119,13 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            "block select-none space-y-1 rounded-xs p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <div className="text-sm font-medium leading-none uppercase tracking-tight">{title}</div>
+          <p className="line-clamp-2 text-xs leading-snug text-muted-foreground mt-1">
             {children}
           </p>
         </a>

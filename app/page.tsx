@@ -9,6 +9,19 @@ const users = [
     phone: "+1 (555) 010-2233",
     location: "Administration Bldg, Room 402",
     initials: "SJ",
+    bio: "Dr. Sarah Johnson is a visionary educator with over 25 years of experience in higher education management. She has served as the Chancellor since 2018, focusing on global partnerships and digital transformation.",
+    education: [
+      { year: "2002", degree: "Ph.D. in Higher Ed Administration", institution: "Oxford University" },
+      { year: "1995", degree: "M.Sc. in Organizational Leadership", institution: "LSE" }
+    ],
+    awards: [
+      { year: "2024", title: "Global Leadership in Education", organization: "UNESCO" },
+      { year: "2021", title: "Educator of the Decade", organization: "World Edu Council" }
+    ],
+    publications: [
+      { year: "2023", title: "The Next Era of Universities: A Digital First Approach" },
+      { year: "2021", title: "Equity and Access in Modern Higher Education" }
+    ]
   },
   {
     name: "Prof. Michael Chen",
@@ -17,6 +30,19 @@ const users = [
     phone: "+1 (555) 010-4455",
     location: "Science Plaza, West Wing",
     initials: "MC",
+    bio: "Professor Michael Chen is a world-renowned physicist specializing in quantum mechanics. As Dean of Sciences, he has pioneered several interdisciplinary research programs that bridge physics and computer science.",
+    education: [
+      { year: "2008", degree: "Ph.D. in Quantum Physics", institution: "MIT" },
+      { year: "2003", degree: "B.S. in Theoretical Physics", institution: "Caltech" }
+    ],
+    awards: [
+      { year: "2022", title: "Nobel Prize in Physics (Nominee)", organization: "Royal Swedish Academy" },
+      { year: "2019", title: "Excellence in Research Medal", organization: "Science Foundation" }
+    ],
+    publications: [
+      { year: "2024", title: "Quantum Computing: From Theory to Reality" },
+      { year: "2022", title: "The Particle Revolution" }
+    ]
   },
   {
     name: "Dr. Elena Rodriguez",
@@ -25,6 +51,19 @@ const users = [
     phone: "+1 (555) 010-6677",
     location: "Innovation Hub, Level 2",
     initials: "ER",
+    bio: "Dr. Elena Rodriguez leads the university's research initiatives, managing over $500M in annual grants. Her work focuses on sustainable development and clean energy technologies.",
+    education: [
+      { year: "2010", degree: "Ph.D. in Environmental Science", institution: "Berkeley" },
+      { year: "2005", degree: "M.Eng. in Sustainability", institution: "ETH Zurich" }
+    ],
+    awards: [
+      { year: "2023", title: "Green Innovator Award", organization: "Earth Alliance" },
+      { year: "2020", title: "Top 30 Under 40 in Science", organization: "Fortune" }
+    ],
+    publications: [
+      { year: "2023", title: "Decarbonizing the Future: A Policy Framework" },
+      { year: "2021", title: "Water Scarcity and Global Stability" }
+    ]
   },
   {
     name: "James Wilson",
@@ -33,6 +72,19 @@ const users = [
     phone: "+1 (555) 010-8899",
     location: "Welcome Center",
     initials: "JW",
+    bio: "James Wilson oversees the global recruitment and admission process. He is dedicated to creating a diverse and inclusive student body, representing over 120 nationalities.",
+    education: [
+      { year: "2012", degree: "MBA", institution: "Harvard Business School" },
+      { year: "2007", degree: "B.A. in International Relations", institution: "Georgetown" }
+    ],
+    awards: [
+      { year: "2022", title: "Diversity and Inclusion Champion", organization: "Education First" },
+      { year: "2018", title: "Rising Star in Admissions", organization: "NACAC" }
+    ],
+    publications: [
+      { year: "2022", title: "Holistic Review: The Future of College Admissions" },
+      { year: "2019", title: "Global Recruitment Strategies" }
+    ]
   },
 ]
 
@@ -53,7 +105,7 @@ export default function Home() {
           </div>
           <p className="max-w-md text-muted-foreground text-sm leading-relaxed">
             Our university is guided by a team of dedicated professionals committed 
-            to academic excellence and institutional growth.
+            to academic excellence and institutional growth. Click on a card to view detailed profile.
           </p>
         </div>
 
