@@ -1,15 +1,14 @@
 "use client"
 
-import * as React from "react"
-import Link from "next/link"
-import { ChevronDown, Menu, X } from "lucide-react"
 import { NavbarDropdown } from "@/components/navbar-dropdown"
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
-import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
+import { Menu, X } from "lucide-react"
+import { useTheme } from "next-themes"
+import Link from "next/link"
+import * as React from "react"
 
 const directoryLinks = [
-  { title: "Directory Home", href: "/directory" },
   { title: "Faculty", href: "/directory/faculty" },
   { title: "Staff", href: "/directory/staff" },
 ]
@@ -18,7 +17,6 @@ const academicLinks = [
   { title: "Academic Home", href: "/academic" },
   { title: "Research", href: "/academic/research" },
   { title: "Publications", href: "/academic/publications" },
-  { title: "Controls", href: "/academic/controls" },
   { title: "Consultations", href: "/academic/consultations" },
   { title: "Awards", href: "/academic/awards" },
 ]

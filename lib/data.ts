@@ -22,7 +22,7 @@ export const users: User[] = [
     phone: "+1 (555) 010-2233",
     location: "Administration Bldg, Room 402",
     initials: "SJ",
-    bio: "Dr. Sarah Johnson is a visionary educator with over 25 years of experience in higher education management. She has served as the Chancellor since 2018, focusing on global partnerships and digital transformation.",
+    bio: "Dr. Sarah Johnson is a visionary educator with over 25 years of experience in higher education management. She has served as the Chancellor since 2018, focusing on global partnerships and digital transformation. Dr. Sarah Johnson is a visionary educator with over 25 years of experience in higher education management. She has served as the Chancellor since 2018, focusing on global partnerships and digital transformation.Dr. Sarah Johnson is a visionary educator with over 25 years of experience in higher education management. She has served as the Chancellor since 2018, focusing on global partnerships and digital transformation.",
     education: [
       { year: "2002", degree: "Ph.D. in Higher Ed Administration", institution: "Oxford University" },
       { year: "1995", degree: "M.Sc. in Organizational Leadership", institution: "LSE" }
