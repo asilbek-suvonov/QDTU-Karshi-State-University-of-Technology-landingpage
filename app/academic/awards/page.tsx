@@ -1,12 +1,13 @@
-import React from 'react';
+import { PageHeader } from '@/components/page-header';
 
 export default function Page() {
   return (
     <div className="container mx-auto px-4 py-20 min-h-screen">
-      <h1 className="text-4xl font-bold uppercase tracking-tighter mb-8">Awards</h1>
-      <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
-        Honors and recognition in the field.
-      </p>
+      <PageHeader 
+        title="Awards" 
+        subtitle="Recognition of academic excellence and achievements."
+      />
     </div>
   );
 }
+

@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { Mail, Phone, MapPin, Globe, Award, BookOpen, GraduationCap } from "lucide-react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

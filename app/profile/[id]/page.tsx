@@ -1,15 +1,25 @@
-import React from 'react'
 import { notFound } from "next/navigation"
+import { PageHeader } from '@/components/page-header';
+import { users } from '@/lib/data';
+import { UserCard } from '@/components/user-card';
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const user = users.find(u => u.id === id)
+
+  if (!user) {
+    notFound()
+  }
 
   return (
     <div className="container mx-auto px-4 py-20 min-h-screen">
-      <h1 className="text-4xl font-bold uppercase tracking-tighter mb-8">Profile: {id}</h1>
-      <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
-        User Profile information for ID: {id}
-      </p>
+      <PageHeader 
+        title={`Profile: ${user.name}`} 
+        subtitle={user.role}
+      />
+      <div className="max-w-xl mx-auto">
+        <UserCard {...user} />
+      </div>
     </div>
   )
 }

@@ -28,12 +28,10 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-20 items-center justify-between mx-auto px-4">
+      <div className="container flex h-17 items-center justify-between mx-auto px-4">
         <div className="flex items-center gap-12">
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="bg-primary p-2 rounded-md group-hover:bg-primary/90 transition-colors">
-              <span className="text-primary-foreground font-black text-xl tracking-tighter">U</span>
-            </div>
+           
             <span className="font-bold text-2xl uppercase tracking-tight text-primary">
               University
             </span>
@@ -49,12 +47,12 @@ export function Navbar() {
               <button className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wider hover:text-primary transition-colors cursor-default">
                 Directory <ChevronDown className="h-4 w-4 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
               </button>
-              <div className="absolute top-[calc(100%-12px)] left-0 w-64 bg-card border border-border shadow-2xl p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 rounded-lg -translate-y-2 group-hover:translate-y-0">
+              <div className="absolute top-[calc(100%-12px)] left-0 w-64 bg-card border border-border shadow-2xl p-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 rounded-lg -translate-y-2 group-hover:translate-y-0">
                 {directoryLinks.map((link) => (
                   <Link
                     key={link.title}
                     href={link.href}
-                    className="block px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-primary/10 hover:text-primary rounded-md transition-all"
+                    className="block px-4 py-3 text-xs font-bold  tracking-widest hover:bg-primary/10 hover:text-primary rounded-md transition-all"
                   >
                     {link.title}
                   </Link>
