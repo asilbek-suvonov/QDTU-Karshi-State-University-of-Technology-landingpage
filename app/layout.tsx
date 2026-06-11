@@ -41,7 +41,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1 relative">
             {children}
-            <ProgressiveBlur position="bottom" height="150px" className="fixed bottom-0 pointer-events-none" />
+            <ProgressiveBlur position="bottom" height="100px" className="fixed bottom-0 pointer-events-none" />
           </main>
         </ThemeProvider>
       </body>

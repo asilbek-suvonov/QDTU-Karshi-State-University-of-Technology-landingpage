@@ -1,6 +1,5 @@
 import React from 'react';
 import { PageHeader } from '@/components/page-header';
-import { UserCard } from '@/components/user-card';
 import { users } from '@/lib/data';
 
 export default function Page() {
@@ -12,11 +11,7 @@ export default function Page() {
         title="Staff List" 
         subtitle="View university administrative and support staff." 
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {staff.map((member) => (
-          <UserCard key={member.id} {...member} />
-        ))}
-      </div>
+      
     </div>
   );
 }
