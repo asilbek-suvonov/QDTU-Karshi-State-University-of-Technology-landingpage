@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button"
 export default function ResearchPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredResearch = researchData.filter((r) =>
+  const filteredResearch = researchData.filter((r: any) =>
     r.researcher.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     r.projectDetails.title.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -37,7 +37,7 @@ export default function ResearchPage() {
         </div>
 
         <div className="flex flex-col gap-8">
-          {filteredResearch.map((research) => (
+          {filteredResearch.map((research: any) => (
             <div key={research.id} className="border-b border-slate-200 dark:border-zinc-800 pb-8 last:border-none">
               
               {/* User Header Profile */}

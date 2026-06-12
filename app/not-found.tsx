@@ -9,9 +9,11 @@ export default function NotFound() {
       <p className="text-lg text-muted-foreground leading-relaxed max-w-md mb-12">
         The page you are looking for might have been moved, deleted, or never existed.
       </p>
-      <Button asChild variant="outline" className="rounded-none uppercase tracking-widest px-8">
-        <Link href="/">Back to Home</Link>
-      </Button>
+      <Link href="/">
+        <Button variant="outline" className="rounded-none uppercase tracking-widest px-8">
+          Back to Home
+        </Button>
+      </Link>
     </div>
   );
 }

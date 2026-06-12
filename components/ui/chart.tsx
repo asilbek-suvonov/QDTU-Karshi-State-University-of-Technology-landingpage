@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
 import { ResponsiveContainer, Tooltip } from "recharts"
 
 import { cn } from "@/lib/utils"
@@ -19,7 +18,9 @@ export type ChartConfig = {
   [k in string]: {
     label?: React.ReactNode
     icon?: React.ComponentType
-  } & ({ color?: string; theme?: never } | { color?: never; theme: Record<string, string> })
+    color?: string
+    theme?: Record<string, string>
+  }
 }
 
 export const ChartContainer = React.forwardRef<
@@ -41,7 +42,10 @@ export const ChartContainer = React.forwardRef<
         style={
           {
             ...Object.entries(config).reduce((acc, [key, value]) => {
-              acc[`--color-${key}`] = value.color || value.theme?.light
+              const color = value.color || value.theme?.light
+              if (color) {
+                acc[`--color-${key}`] = color
+              }
               return acc
             }, {} as Record<string, string>),
           } as React.CSSProperties
@@ -59,16 +63,10 @@ export const ChartTooltip = Tooltip
 
 export const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"div"> & {
-    hideLabel?: boolean
-    hideIndicator?: boolean
-    indicator?: "line" | "dot" | "dashed"
-    nameKey?: string
-    labelKey?: string
-  }
+  any
 >(
-  (
-    {
+  (props, ref) => {
+    const {
       active,
       payload,
       className,
@@ -78,13 +76,11 @@ export const ChartTooltipContent = React.forwardRef<
       label,
       labelFormatter,
       labelClassName,
-      formatter,
-      color,
       nameKey,
       labelKey,
-    },
-    ref
-  ) => {
+      color,
+    } = props
+
     const { config } = useChart()
 
     const tooltipLabel = React.useMemo(() => {
@@ -124,16 +120,16 @@ export const ChartTooltipContent = React.forwardRef<
       >
         {tooltipLabel}
         <div className="grid gap-1.5">
-          {payload.map((item, index) => {
+          {payload.map((item: any, index: number) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = Object.entries(config).find(
               ([configKey]) => configKey === key
             )?.[1]
-            const indicatorColor = color || item.payload.fill || item.color
+            const indicatorColor = color || item.payload?.fill || item.color
 
             return (
               <div
-                key={item.dataKey}
+                key={item.dataKey || index}
                 className={cn(
                   "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
                   indicator === "dot" && "items-center"
@@ -169,7 +165,7 @@ export const ChartTooltipContent = React.forwardRef<
                       {itemConfig?.label || item.name}
                     </span>
                   </div>
-                  {item.value && (
+                  {item.value !== undefined && (
                     <span className="font-mono font-medium tabular-nums text-foreground">
                       {item.value.toLocaleString()}
                     </span>
@@ -183,4 +179,4 @@ export const ChartTooltipContent = React.forwardRef<
     )
   }
 )
-ChartTooltipContent.displayName = "ChartTooltip"
+ChartTooltipContent.displayName = "ChartTooltipContent"

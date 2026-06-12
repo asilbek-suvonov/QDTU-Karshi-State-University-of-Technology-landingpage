@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button"
 export default function ConsultationsPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredConsultants = mockConsultationsData.consultantsList.filter((c) =>
+  const filteredConsultants = mockConsultationsData.consultantsList.filter((c: any) =>
     c.consultant.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.projects.some(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    c.projects.some((p: any) => p.title.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
   return (
@@ -30,7 +30,7 @@ export default function ConsultationsPage() {
 
         <div className="flex flex-col gap-8">
           {filteredConsultants.length > 0 ? (
-            filteredConsultants.map((data) => (
+            filteredConsultants.map((data: any) => (
               <div key={data.id} className="border-b border-slate-200 dark:border-zinc-800 pb-8 last:border-none">
                 
                 {/* Consultant Header Profile */}
@@ -56,7 +56,7 @@ export default function ConsultationsPage() {
 
                 {/* Projects */}
                 <div className="space-y-4">
-                  {data.projects.map(project => (
+                  {data.projects.map((project: any) => (
                     <div key={project.id} className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all">
                       <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">{project.title}</h3>
                       <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1 mb-3">Client: {project.client}</p>

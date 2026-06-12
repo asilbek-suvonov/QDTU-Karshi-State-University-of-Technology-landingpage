@@ -9,15 +9,15 @@ import { Calendar, FileText, Globe } from "lucide-react"
 export default function PublicationsPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
-  const allPublications = Object.values(mockPublicationsData).flatMap(author => 
-    author.publicationsByGroup.flatMap(group => group.items.map(item => ({
+  const allPublications = Object.values(mockPublicationsData).flatMap((author: any) => 
+    author.publicationsByGroup.flatMap((group: any) => group.items.map((item: any) => ({
       ...item,
       authorName: author.author.fullName,
       avatarUrl: author.author.avatarUrl
     })))
   );
 
-  const filteredPublications = allPublications.filter((p) =>
+  const filteredPublications = allPublications.filter((p: any) =>
     p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     p.authorName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -37,7 +37,7 @@ export default function PublicationsPage() {
 
         <div className="flex flex-col gap-8">
           {filteredPublications.length > 0 ? (
-            filteredPublications.map((pub) => (
+            filteredPublications.map((pub: any) => (
               <div key={pub.id} className="border-b border-slate-200 dark:border-zinc-800 pb-8 last:border-none">
                 <div className="flex items-center gap-4 mb-6">
                     <img 

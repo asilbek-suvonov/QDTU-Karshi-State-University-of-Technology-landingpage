@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/button"
 export default function AwardsPage() {
   const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredAwards = mockAwardsData.awardsList.filter((a) =>
+  const filteredAwards = mockAwardsData.awardsList.filter((a: any) =>
     a.consultant.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    a.awards.some(award => award.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    a.awards.some((award: any) => award.title.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
   return (
@@ -30,7 +30,7 @@ export default function AwardsPage() {
 
         <div className="flex flex-col gap-8">
           {filteredAwards.length > 0 ? (
-            filteredAwards.map((data) => (
+            filteredAwards.map((data: any) => (
               <div key={data.consultant.fullName} className="border-b border-slate-200 dark:border-zinc-800 pb-8 last:border-none">
                 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
@@ -52,7 +52,7 @@ export default function AwardsPage() {
                 </div>
 
                 <div className="space-y-4">
-                  {data.awards.map(award => (
+                  {data.awards.map((award: any) => (
                     <div key={award.id} className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all">
                       <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">{award.title}</h3>
                       <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1 mb-3">{award.description}</p>

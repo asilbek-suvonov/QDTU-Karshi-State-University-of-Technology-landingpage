@@ -4,6 +4,7 @@ import { researchData } from "@/lib/research-data"
 import { mockPublicationsData } from "@/lib/publications-data"
 import { mockConsultationsData } from "@/lib/consultations-data"
 import { mockAwardsData } from "@/lib/awards-data"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -81,17 +82,17 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ i
               {userResearch.length > 0 ? userResearch.map(res => (
                 <div key={res.id} className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm transition-all hover:shadow-md">
                   <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">{res.projectDetails.title}</h3>
-                  <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1">{res.projectDetails.description}</p>
+                  <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1">{res.projectDetails.organization}</p>
                 </div>
               )) : <p className="text-muted-foreground">No research projects found.</p>}
             </TabsContent>
             
             <TabsContent value="publications" className="space-y-6">
-              {userPublications.publicationsByGroup.map(group => (
-                <div key={group.categoryTitle}>
-                  <h3 className="text-lg font-semibold mb-3">{group.categoryTitle}</h3>
+              {userPublications.publicationsByGroup.map((group: any) => (
+                <div key={group.groupName}>
+                  <h3 className="text-lg font-semibold mb-3">{group.groupName}</h3>
                   <div className="space-y-3">
-                    {group.items.map(item => (
+                    {group.items.map((item: any) => (
                       <div key={item.id} className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all">
                         <div className="flex justify-between items-center">
                             <h4 className="font-normal text-slate-900 dark:text-white text-base">{item.title}</h4>
@@ -112,7 +113,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ i
             </TabsContent>
             
             <TabsContent value="awards" className="space-y-4">
-              {userAwards.awards.map(a => (
+              {userAwards.awards.map((a: any) => (
                 <div key={a.id} className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all">
                   <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">{a.title}</h3>
                   <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1 mb-3">{a.description}</p>
@@ -125,7 +126,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ i
             </TabsContent>
             
             <TabsContent value="consultations" className="space-y-4">
-              {userConsultations.projects.map(p => (
+              {userConsultations.projects.map((p: any) => (
                 <div key={p.id} className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all">
                   <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">{p.title}</h3>
                   <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1 mb-3">Client: {p.client}</p>
@@ -142,3 +143,4 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ i
     </div>
   )
 }
+
