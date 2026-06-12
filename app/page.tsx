@@ -25,6 +25,7 @@ export default function Home() {
             {users.map((user) => (
               <UserCard
                 key={user.id}
+                id={user.id}
                 name={user.name}
                 role={user.role}
                 email={user.email}

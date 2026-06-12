@@ -14,11 +14,10 @@ const directoryLinks = [
 ]
 
 const academicLinks = [
-  { title: "Academic Home", href: "/academic" },
-  { title: "Research", href: "/academic/research" },
-  { title: "Publications", href: "/academic/publications" },
-  { title: "Consultations", href: "/academic/consultations" },
-  { title: "Awards", href: "/academic/awards" },
+  { title: "Research", href: "/research" },
+  { title: "Publications", href: "/publications" },
+  { title: "Consultations", href: "/consultations" },
+  { title: "Awards", href: "/awards" },
 ]
 
 export function Navbar() {

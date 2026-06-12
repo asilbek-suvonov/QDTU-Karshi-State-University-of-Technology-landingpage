@@ -79,6 +79,7 @@ export default async function FacultyDetailPage({
         </h2>
         
         <UserCard 
+          id={deanData.id}
           name={deanData.name}
           role={deanData.role}
           email={deanData.email}
