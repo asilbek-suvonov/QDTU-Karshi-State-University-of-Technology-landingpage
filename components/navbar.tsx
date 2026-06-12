@@ -51,6 +51,16 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
+          <div className="hidden sm:block">
+            <NavbarDropdown 
+              title="UZ" 
+              links={[
+                { title: "English", href: "#" },
+                { title: "Русский", href: "#" },
+                { title: "O'zbekcha", href: "#" },
+              ]} 
+            />
+          </div>
           <div className="border-l border-border pl-4 flex items-center h-8">
             <AnimatedThemeToggler 
               theme={theme as "light" | "dark"} 

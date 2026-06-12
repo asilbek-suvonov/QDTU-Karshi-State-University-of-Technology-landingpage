@@ -35,7 +35,7 @@ export default async function StaffProfilePage({ params }: { params: Promise<{ i
             <CardContent className="p-6 pt-0 space-y-6">
               <div className="flex flex-col items-center text-center -mt-18">
                 <Avatar className="h-28 w-28 border-4 border-card shadow-md">
-                  <AvatarImage src={user.avatar} alt={user.name} className="object-cover" />
+                  <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" />
                   <AvatarFallback className="text-4xl">{user.initials}</AvatarFallback>
                 </Avatar>
                 <h1 className="mt-2 text-2xl font-bold text-foreground">{user.name}</h1>

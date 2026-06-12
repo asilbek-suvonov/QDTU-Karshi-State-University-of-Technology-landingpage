@@ -16,7 +16,6 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
-import { PageHeader } from "@/components/page-header"
 
 // --- University Context Data ---
 const areaChartData = [

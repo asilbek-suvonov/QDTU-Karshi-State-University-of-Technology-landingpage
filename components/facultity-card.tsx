@@ -2,55 +2,15 @@ import React from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { ChevronRight, ArrowUpRight } from "lucide-react"
-
-interface FacultyType {
-  title: string
-  imageUrl: string
-  departments: string[]
-  id: string
-}
-
-// Rasmdagi ma'lumotlar asosida tuzilgan mock data
-const facultiesList: FacultyType[] = [
-  {
-    title: "Arxitektura fakulteti",
-    imageUrl: "https://images.unsplash.com/photo-1504297050568-910d24c426d3?auto=format&fit=crop&w=500&q=80",
-    departments: ["Adabiyot va ona tili...", "Arxitektura va dizayn"],
-    id: "1"
-  },
-  {
-    title: "Asulan (Axborot Tizimlari)",
-    imageUrl: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=500&q=80",
-    departments: ["Salom...", "Dasturiy injiniring kafedrasi"],
-    id: "2"
-  },
-  {
-    title: "Davolash fakulteti",
-    imageUrl: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=500&q=80",
-    departments: ["Farmatsiya va kimyo kafedrasi...", "book..."],
-    id: "3"
-  },
-  {
-    title: "Sun'iy intellekt",
-    imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80",
-    departments: ["Axborot tizimlari xavfsizligi...", "Axborot Texnologiyalari kafedrasi..."],
-    id: "4"
-  },
-  {
-    title: "Xorijiy tillar fakulteti",
-    imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=500&q=80",
-    departments: ["Arxeologik ishlar kafedrasi...", "developerds...", "Asu..."],
-    id: "5"
-  }
-];
+import { faculties } from "@/lib/data"
 
 const FacultyCardsContainer = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 w-full  mx-auto">
-      {facultiesList.map((faculty, index) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6 w-full mx-auto">
+      {faculties.map((faculty, index) => (
         <Card 
           key={index} 
-          className="group w-full overflow-hidden border border-border/80 bg-card shadow-md transition-all duration-300 hover:shadow-xl  rounded-xl flex flex-col justify-between p-0 gap-1"
+          className="group w-full overflow-hidden border border-border/80 bg-card shadow-md transition-all duration-300 hover:shadow-xl rounded-xl flex flex-col justify-between p-0 gap-1"
         >
           {/* Fakultet Rasmi */}
           <div className="relative h-44 w-full bg-muted overflow-hidden">
@@ -88,7 +48,7 @@ const FacultyCardsContainer = () => {
           <CardFooter className="px-5 py-3 border-t border-border/50 bg-muted/20">
             <Link 
               href={`/directory/faculty/${faculty.id}`} 
-              className="inline-flex items-center text-xs  tracking-wider text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors gap-1 group/link"
+              className="inline-flex items-center text-xs tracking-wider text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors gap-1 group/link"
             >
              {" Batafsil ma'lumot"}
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />

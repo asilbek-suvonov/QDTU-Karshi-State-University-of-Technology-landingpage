@@ -42,7 +42,7 @@ export default function Page() {
               email={user.email}
               phone={user.phone}
               location={user.location}
-              avatarUrl={user.avatar}
+              avatarUrl={user.avatarUrl}
             />
           </Link>
         ))}

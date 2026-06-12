@@ -274,9 +274,9 @@ export const AnimatedThemeToggler = ({
       {!mounted ? (
         <span className="w-6 h-6 inline-block" /> // yoki shunchaki <Moon /> qo'yish mumkin layoqatsiz ko'rinmasligi uchun
       ) : isDark ? (
-        <Sun />
+        <Sun size={18} />
       ) : (
-        <Moon />
+        <Moon size={18} />
       )}
       <span className="sr-only">Toggle theme</span>
     </button>
