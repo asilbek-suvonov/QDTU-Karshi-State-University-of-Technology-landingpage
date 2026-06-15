@@ -2,6 +2,9 @@
 export interface DepartmentListItem {
   id: number;
   name: string;
+  imgUrl: string | null;
+  collegeId: number;
+  collegeName: string;
 }
 
 export interface DepartmentPageItem {

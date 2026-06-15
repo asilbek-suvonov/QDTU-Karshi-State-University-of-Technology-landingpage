@@ -1,14 +1,12 @@
-import axios, { 
-  AxiosInstance, 
-  AxiosRequestConfig, 
-  AxiosResponse, 
-  InternalAxiosRequestConfig 
-} from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 
-/**
- * Mocking userStore to prevent import errors as per requirements.
- * In a real scenario, this would be imported from your state management (e.g., Zustand).
- */
+const BASE_URL = "/api-proxy";
+
 const useUserStore = {
   getState: () => ({
     userToken: {
@@ -18,17 +16,17 @@ const useUserStore = {
 };
 
 const clearUserInfoAndToken = () => {
-  console.log('Clearing user info and token...');
+  console.log("Clearing user info and token...");
 };
 
 class ApiClient {
   private instance: AxiosInstance;
 
-  constructor(baseURL: string = process.env.NEXT_PUBLIC_API_URL || '') {
+  constructor(baseURL: string = BASE_URL) {
     this.instance = axios.create({
       baseURL,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -36,7 +34,6 @@ class ApiClient {
   }
 
   private initializeInterceptors() {
-    // Request Interceptor
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         const token = useUserStore.getState().userToken?.accessToken;
@@ -45,34 +42,29 @@ class ApiClient {
         }
         return config;
       },
-      (error: any) => Promise.reject(error)
+      (error: unknown) => Promise.reject(error)
     );
 
-    // Response Interceptor
     this.instance.interceptors.response.use(
       (response: AxiosResponse) => response,
-      (error: any) => {
-        const status = error.response?.status;
-        const isAuthPage = typeof window !== 'undefined' && window.location.pathname.includes('/login');
+      (error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          const isAuthPage =
+            typeof window !== "undefined" &&
+            window.location.pathname.includes("/login");
 
-        if ((status === 400 || status === 401) && !isAuthPage) {
-          clearUserInfoAndToken();
-          if (typeof window !== 'undefined') {
-            window.location.href = '/login';
+          if ((status === 400 || status === 401) && !isAuthPage) {
+            clearUserInfoAndToken();
+            if (typeof window !== "undefined") {
+              window.location.href = "/login";
+            }
+          }
+
+          if (status === 500) {
+            console.error("Server xatosi. Iltimos, keyinroq urinib ko'ring.");
           }
         }
-
-        if (status === 500) {
-          const message = 'A generic server error occurred. Please try again later.';
-          // @ts-ignore
-          if (typeof toast !== 'undefined') {
-            // @ts-ignore
-            toast.error(message);
-          } else {
-            alert(message);
-          }
-        }
-
         return Promise.reject(error);
       }
     );
@@ -84,23 +76,35 @@ class ApiClient {
   }
 
   public async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'GET', url });
+    return this.request<T>({ ...config, method: "GET", url });
   }
 
-  public async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'POST', url, data });
+  public async post<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return this.request<T>({ ...config, method: "POST", url, data });
   }
 
-  public async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'PUT', url, data });
+  public async put<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return this.request<T>({ ...config, method: "PUT", url, data });
   }
 
-  public async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'PATCH', url, data });
+  public async patch<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    return this.request<T>({ ...config, method: "PATCH", url, data });
   }
 
   public async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'DELETE', url });
+    return this.request<T>({ ...config, method: "DELETE", url });
   }
 }
 

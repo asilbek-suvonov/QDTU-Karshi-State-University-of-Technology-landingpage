@@ -1,36 +1,45 @@
+"use client";
+
+import { use } from "react";
 import { notFound } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Loader2, Building2 } from "lucide-react";
 import { UserCard } from "@/components/user-card";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { faculties, users } from "@/lib/data";
+import { useGetCollegeById } from "@/hooks/useCollege";
+import { useGetUsersByCollege } from "@/hooks/useUser";
 
-export default async function FacultyDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const faculty = faculties.find(f => f.id === id);
+function FacultyDetailContent({ id }: { id: string }) {
+  const { data: collegeData, isLoading, isError } = useGetCollegeById(id);
+  const { data: usersData } = useGetUsersByCollege(id);
 
-  if (!faculty) {
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (isError || !collegeData?.data) {
     notFound();
   }
 
-  const deanData = users.find(u => u.id === faculty.deanId) || users[0];
+  const college = collegeData.data;
+  const users = usersData?.data ?? [];
 
   const stats = [
-    { title: "Professors", value: faculty.stats.professors },
-    { title: "Docents", value: faculty.stats.docents },
-    { title: "PhD", value: faculty.stats.phd },
-    { title: "DSc", value: faculty.stats.dsc },
+    { title: "Professors", value: college.countProfessor },
+    { title: "Docents", value: college.countDotsent },
+    { title: "PhD", value: college.countPHD },
+    { title: "DSc", value: college.countDSC },
   ];
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Directory", href: "/directory" },
     { label: "Faculties", href: "/directory/faculty" },
-    { label: faculty.title },
+    { label: college.name },
   ];
 
   return (
@@ -43,11 +52,17 @@ export default async function FacultyDetailPage({
           <Card className="bg-card border-border shadow-lg p-0 overflow-hidden rounded-xl">
             <CardContent className="p-0">
               <div className="h-64 w-full relative">
-                <img
-                  src={faculty.imageUrl}
-                  alt={faculty.title}
-                  className="object-cover w-full h-full"
-                />
+                {college.imgUrl ? (
+                  <img
+                    src={college.imgUrl}
+                    alt={college.name}
+                    className="object-cover w-full h-full"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                    <Building2 className="h-16 w-16 text-muted-foreground" />
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -72,24 +87,52 @@ export default async function FacultyDetailPage({
         </div>
       </div>
 
-      {/* About Section & UserCard */}
-      <section className="mt-12 max-w-md">
-        <h2 className="text-xl font-semibold text-white mb-5">
-          Faculty Administration
-        </h2>
-        
-        <UserCard 
-          id={deanData.id}
-          name={deanData.name}
-          role={deanData.role}
-          email={deanData.email}
-          phone={deanData.phone}
-          location={deanData.location}
-          joinedDate={deanData.joinedDate}
-          avatarUrl={deanData.avatarUrl}
-          bannerUrl={deanData.bannerUrl}
-        />
-      </section>
+      {/* Departments */}
+      {college.departmentList.length > 0 && (
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold mb-3">Kafedralar</h2>
+          <div className="flex flex-wrap gap-2">
+            {college.departmentList.map((dept) => (
+              <span
+                key={dept.id}
+                className="text-sm px-3 py-1.5 bg-muted rounded-lg text-muted-foreground"
+              >
+                {dept.name}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Staff Section */}
+      {users.length > 0 && (
+        <section className="mt-12">
+          <h2 className="text-xl font-semibold text-foreground mb-5">
+            O'qituvchilar ({users.length})
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+            {users.map((user) => (
+              <UserCard
+                key={user.id}
+                id={user.id}
+                fullName={user.fullName}
+                collegeName={user.collegeName}
+                departmentName={user.departmentName}
+                imgUrl={user.imgUrl}
+              />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
+}
+
+export default function FacultyDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  return <FacultyDetailContent id={id} />;
 }
