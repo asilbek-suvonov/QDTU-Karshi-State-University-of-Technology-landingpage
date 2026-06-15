@@ -2,317 +2,318 @@
 
 import { use } from "react";
 import { notFound } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Phone, BookOpen, Mail, Loader2, Calendar, Globe,
+  FileText, ExternalLink, CheckCircle2, User, Trophy, FlaskConical, MessageSquare,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Download,
-  Calendar,
-  CheckCircle2,
-  User,
-  ExternalLink,
-  FileText,
-  Building,
-  Loader2,
-} from "lucide-react";
-import { ReadMoreText } from "@/components/ui/read-more-text";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import { useGetTeacherById } from "@/hooks/useTeacher";
+import { AuthRequired } from "@/components/auth-required";
+import { ReadMoreText } from "@/components/ui/read-more-text";
+import { useAllStaff } from "@/hooks/useAllStaff";
 import { useGetResearchByUser } from "@/hooks/useResearch";
 import { useGetPublicationsByUser } from "@/hooks/usePublication";
 import { useGetConsultationsByUser } from "@/hooks/useConsultation";
 import { useGetAwardsByUser } from "@/hooks/useAward";
+import { useAuth } from "@/store/auth.store";
+import type { ResearchDataItem } from "@/service/research/research.type";
+import type { PublicationData } from "@/service/publication/publication.type";
+import type { AwardData } from "@/service/award/award.type";
+import type { ConsultationData } from "@/service/consultation/consultation.type";
+import axios from "axios";
 
-function StaffProfileContent({ id }: { id: string }) {
-  const { data: teacherData, isLoading, isError } = useGetTeacherById(id);
-  const { data: researchData } = useGetResearchByUser(id);
-  const { data: publicationsData } = useGetPublicationsByUser(id);
-  const { data: consultationsData } = useGetConsultationsByUser(id);
-  const { data: awardsData } = useGetAwardsByUser(id);
+// ── Tab components ──────────────────────────────────────────────────────────
+
+function ResearchTab({ userId }: { userId: number }) {
+  const { data, isLoading, error } = useGetResearchByUser(userId);
+  const is403 = axios.isAxiosError(error) && error.response?.status === 403;
+  const items: ResearchDataItem[] = data?.data?.body ?? [];
+
+  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (is403) return <AuthRequired title="Tadqiqot ma'lumotlari" />;
+  if (!items.length) return <EmptyState icon={FlaskConical} text="Tadqiqot topilmadi." />;
+
+  return (
+    <div className="space-y-3">
+      {items.map((r) => (
+        <div key={r.id} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{r.name}</h3>
+            {r.fileUrl && (
+              <a href={r.fileUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-muted-foreground hover:text-foreground">
+                <FileText className="h-4 w-4" />
+              </a>
+            )}
+          </div>
+          {r.description && <ReadMoreText text={r.description} limit={80} />}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+              <Calendar className="h-3 w-3" />{r.year}
+            </Badge>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PublicationsTab({ userId }: { userId: number }) {
+  const { data, isLoading, error } = useGetPublicationsByUser(userId);
+  const is403 = axios.isAxiosError(error) && error.response?.status === 403;
+  const items: PublicationData[] = data?.data?.body ?? [];
+
+  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (is403) return <AuthRequired title="Nashrlar" />;
+  if (!items.length) return <EmptyState icon={BookOpen} text="Nashr topilmadi." />;
+
+  return (
+    <div className="space-y-3">
+      {items.map((pub) => (
+        <div key={pub.id} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{pub.name}</h3>
+              <p className="mt-0.5 text-xs text-muted-foreground truncate">{pub.institution}</p>
+            </div>
+            {pub.fileUrl && (
+              <a href={pub.fileUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-muted-foreground hover:text-foreground">
+                <ExternalLink className="h-4 w-4" />
+              </a>
+            )}
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+              <Calendar className="h-3 w-3" />{pub.year}
+            </Badge>
+            <Badge variant="outline" className="text-xs bg-sky-50 text-sky-600 border-sky-100 dark:bg-sky-950/30 dark:text-sky-400 dark:border-sky-900">
+              <Globe className="h-3 w-3 mr-1" />{pub.degree}
+            </Badge>
+            <Badge variant="outline" className="text-xs bg-purple-50 text-purple-600 border-purple-100 dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-900">
+              {pub.author}
+            </Badge>
+            {pub.type && <Badge variant="outline" className="text-xs">{pub.type}</Badge>}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AwardsTab({ userId }: { userId: number }) {
+  const { data, isLoading, error } = useGetAwardsByUser(userId);
+  const is403 = axios.isAxiosError(error) && error.response?.status === 403;
+  const items: AwardData[] = data?.data?.body ?? [];
+
+  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (is403) return <AuthRequired title="Mukofotlar" />;
+  if (!items.length) return <EmptyState icon={Trophy} text="Mukofot topilmadi." />;
+
+  return (
+    <div className="space-y-3">
+      {items.map((a, i) => (
+        <div key={i} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
+          <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{a.name}</h3>
+          {a.description && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{a.description}</p>}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+              <Calendar className="h-3 w-3" />{a.year}
+            </Badge>
+            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-900">
+              {a.memberEnum}
+            </Badge>
+            {a.awardEnum && (
+              <Badge variant="outline" className="text-xs bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900">
+                {a.awardEnum.replace(/_/g, " ")}
+              </Badge>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ConsultationsTab({ userId }: { userId: number }) {
+  const { data, isLoading, error } = useGetConsultationsByUser(userId);
+  const is403 = axios.isAxiosError(error) && error.response?.status === 403;
+  const items: ConsultationData[] = data?.data?.body ?? [];
+
+  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (is403) return <AuthRequired title="Maslahat loyihalari" />;
+  if (!items.length) return <EmptyState icon={MessageSquare} text="Maslahat topilmadi." />;
+
+  return (
+    <div className="space-y-3">
+      {items.map((c) => (
+        <div key={c.id} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
+          <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{c.name}</h3>
+          {c.leader && <p className="mt-0.5 text-xs text-muted-foreground">Rahbar: {c.leader}</p>}
+          {c.description && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{c.description}</p>}
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge variant="outline" className="gap-1 text-xs bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900">
+              <CheckCircle2 className="h-3 w-3" />{c.finishedEnum}
+            </Badge>
+            <Badge variant="outline" className="gap-1 text-xs">
+              <User className="h-3 w-3" />{c.member ? "A'zo" : "Rahbar"}
+            </Badge>
+            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+              <Calendar className="h-3 w-3" />{c.year}
+            </Badge>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EmptyState({ icon: Icon, text }: { icon: React.ElementType; text: string }) {
+  return (
+    <div className="py-16 text-center">
+      <Icon className="mx-auto h-10 w-10 text-muted-foreground/25 mb-3" />
+      <p className="text-sm text-muted-foreground">{text}</p>
+    </div>
+  );
+}
+
+// ── Main ────────────────────────────────────────────────────────────────────
+
+function StaffDetail({ id }: { id: string }) {
+  const { staff, isLoading } = useAllStaff();
+  const { isAuthenticated } = useAuth();
+  const numId = Number(id);
+  const user = staff.find((u) => u.id === numId);
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
+  if (!user) notFound();
 
-  if (isError || !teacherData?.data) {
-    notFound();
-  }
+  const initials = user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
-  const teacher = teacherData.data;
-
-  const initials = teacher.fullName
-    .split(" ")
-    .map((n: string) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-
-  const breadcrumbItems = [
+  const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "Staff", href: "/directory/staff" },
-    { label: teacher.fullName },
+    { label: user.fullName },
   ];
 
-  const research = researchData?.data?.body ?? [];
-  const publications = publicationsData?.data?.body ?? [];
-  const consultations = consultationsData?.data?.body ?? [];
-  const awards = awardsData?.data?.body ?? [];
-
   return (
-    <div className="container mx-auto px-4 py-10 min-h-screen">
-      <Breadcrumb items={breadcrumbItems} />
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-10">
+        <Breadcrumb items={breadcrumbs} />
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-8">
-        {/* Left Column */}
-        <div className="md:col-span-1">
-          <Card className="sticky top-24 bg-card border-border shadow-lg overflow-hidden p-0">
-            <div className="h-24 bg-gradient-to-r from-primary/80 to-secondary/80"></div>
-            <CardContent className="p-6 pt-0 space-y-6">
-              <div className="flex flex-col items-center text-center -mt-18">
-                <Avatar className="h-28 w-28 border-4 border-card shadow-md">
-                  {teacher.imgUrl && (
-                    <AvatarImage
-                      src={teacher.imgUrl}
-                      alt={teacher.fullName}
-                      className="object-cover"
-                    />
-                  )}
-                  <AvatarFallback className="text-4xl">{initials}</AvatarFallback>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Sidebar */}
+          <div className="md:col-span-1">
+            <div className="sticky top-24 rounded-xl border border-border bg-card overflow-hidden">
+              <div className="h-20 bg-gradient-to-r from-primary/20 to-primary/5" />
+              <div className="px-5 pb-5 -mt-10">
+                <Avatar className="h-20 w-20 border-4 border-card shadow-md mb-3">
+                  {user.imgUrl && <AvatarImage src={user.imgUrl} alt={user.fullName} className="object-cover" />}
+                  <AvatarFallback className="text-xl font-bold">{initials}</AvatarFallback>
                 </Avatar>
-                <h1 className="mt-2 text-2xl font-bold text-foreground">
-                  {teacher.fullName}
-                </h1>
-                {teacher.position && (
-                  <Badge
-                    variant="secondary"
-                    className="bg-blue-50 text-blue-700 hover:bg-blue-50 dark:bg-blue-950/50 dark:text-blue-400 dark:hover:bg-blue-950/50 border border-blue-200/60 dark:border-blue-900/50 px-2 py-0.5 rounded-md text-xs font-medium mt-2"
-                  >
-                    {teacher.position}
+
+                <h1 className="text-lg font-bold text-foreground leading-tight">{user.fullName}</h1>
+                {user.lavozim && (
+                  <Badge variant="secondary" className="mt-1.5 text-xs bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400 border border-blue-200/60 dark:border-blue-900/50">
+                    {user.lavozim}
                   </Badge>
                 )}
+
+                <div className="mt-4 space-y-2.5 text-sm text-muted-foreground border-t border-border pt-4">
+                  {user.departmentName && (
+                    <div className="flex items-start gap-2">
+                      <BookOpen className="h-4 w-4 shrink-0 mt-0.5" />
+                      <span>{user.departmentName}</span>
+                    </div>
+                  )}
+                  {user.phoneNumber && (
+                    <div className="flex items-center gap-2">
+                      <Phone className="h-4 w-4 shrink-0" />
+                      <span>{user.phoneNumber}</span>
+                    </div>
+                  )}
+                  {user.email && (
+                    <div className="flex items-start gap-2">
+                      <Mail className="h-4 w-4 shrink-0 mt-0.5" />
+                      <span className="truncate">{user.email}</span>
+                    </div>
+                  )}
+                  {user.profession && (
+                    <div className="pt-1 border-t border-border">
+                      <p className="text-xs text-muted-foreground/70 mb-0.5">Mutaxassislik</p>
+                      <p className="text-foreground text-sm">{user.profession}</p>
+                    </div>
+                  )}
+                  {user.orcId && (
+                    <div>
+                      <p className="text-xs text-muted-foreground/70 mb-0.5">ORCID</p>
+                      <p className="text-xs font-mono">{user.orcId}</p>
+                    </div>
+                  )}
+                  {user.scopusId && (
+                    <div>
+                      <p className="text-xs text-muted-foreground/70 mb-0.5">Scopus ID</p>
+                      <p className="text-xs font-mono">{user.scopusId}</p>
+                    </div>
+                  )}
+                  {user.scienceId && (
+                    <div>
+                      <p className="text-xs text-muted-foreground/70 mb-0.5">Science ID</p>
+                      <p className="text-xs font-mono">{user.scienceId}</p>
+                    </div>
+                  )}
+                </div>
               </div>
+            </div>
+          </div>
 
-              <div className="space-y-4 pt-6 border-t border-border">
-                {teacher.phone && (
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span className="font-medium">Tel:</span> {teacher.phone}
-                  </div>
-                )}
-                {teacher.collegeName && (
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <Building className="h-4 w-4" /> {teacher.collegeName}
-                  </div>
-                )}
-                {teacher.departmentName && (
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <User className="h-4 w-4" /> {teacher.departmentName}
-                  </div>
-                )}
-                {teacher.birthDate && (
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4" /> {teacher.birthDate}
-                  </div>
-                )}
-                {teacher.scientificDegree && (
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span className="font-medium">Ilmiy daraja:</span>{" "}
-                    {teacher.scientificDegree}
-                  </div>
-                )}
-                {teacher.academicTitle && (
-                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                    <span className="font-medium">Unvon:</span>{" "}
-                    {teacher.academicTitle}
-                  </div>
-                )}
-                <Button className="w-full mt-4" variant="outline">
-                  <Download className="mr-2 h-4 w-4" /> Download Resume
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Right Column */}
-        <div className="md:col-span-3 space-y-6">
-          <Tabs defaultValue="research" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 bg-muted">
-              <TabsTrigger value="research">Research</TabsTrigger>
-              <TabsTrigger value="publications">Publications</TabsTrigger>
-              <TabsTrigger value="awards">Awards</TabsTrigger>
-              <TabsTrigger value="consultations">Consultations</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="research" className="space-y-4">
-              {research.length > 0 ? (
-                research.map((res) => (
-                  <div
-                    key={res.id}
-                    className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm transition-all hover:shadow-md"
-                  >
-                    <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">
-                      {res.name}
-                    </h3>
-                    {res.description && (
-                      <ReadMoreText text={res.description} limit={120} />
-                    )}
-                    <div className="flex gap-2 mt-3">
-                      <Badge
-                        variant="outline"
-                        className="font-normal bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400 border-red-100 dark:border-red-900"
-                      >
-                        <Calendar className="w-3.5 h-3.5 mr-1" />
-                        {res.year}
-                      </Badge>
-                      {res.fileUrl && (
-                        <a href={res.fileUrl} target="_blank" rel="noopener noreferrer">
-                          <Badge
-                            variant="outline"
-                            className="font-normal bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-100 dark:border-blue-900 cursor-pointer"
-                          >
-                            <FileText className="w-3.5 h-3.5 mr-1" /> Fayl
-                          </Badge>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground">
-                  No research projects found.
-                </p>
-              )}
-            </TabsContent>
-
-            <TabsContent value="publications" className="space-y-4">
-              {publications.length > 0 ? (
-                publications.map((pub) => (
-                  <div
-                    key={pub.id}
-                    className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all"
-                  >
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-normal text-slate-900 dark:text-white text-base">
-                        {pub.name}
-                      </h4>
-                      <div className="flex gap-2 text-slate-400">
-                        {pub.fileUrl && (
-                          <a href={pub.fileUrl} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1 mb-3">
-                      {pub.institution}
-                    </p>
-                    <div className="flex gap-2 mt-2">
-                      <Badge
-                        variant="outline"
-                        className="font-normal bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400 border-red-100 dark:border-red-900"
-                      >
-                        <Calendar className="w-3.5 h-3.5 mr-1" />
-                        {pub.year}
-                      </Badge>
-                      <Badge
-                        variant="secondary"
-                        className="font-normal bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-100 dark:border-blue-900"
-                      >
-                        {pub.degree}
-                      </Badge>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground">No publications found.</p>
-              )}
-            </TabsContent>
-
-            <TabsContent value="awards" className="space-y-4">
-              {awards.length > 0 ? (
-                awards.map((award, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all"
-                  >
-                    <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">
-                      {award.name}
-                    </h3>
-                    <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1 mb-3">
-                      {award.description}
-                    </p>
-                    <div className="flex gap-2">
-                      <Badge className="font-normal bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400 border-red-100 dark:border-red-900">
-                        <Calendar className="w-3.5 h-3.5 mr-1" />
-                        {award.year}
-                      </Badge>
-                      <Badge className="font-normal bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-100 dark:border-blue-900">
-                        <Building className="w-3.5 h-3.5 mr-1" />
-                        {award.memberEnum}
-                      </Badge>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground">No awards found.</p>
-              )}
-            </TabsContent>
-
-            <TabsContent value="consultations" className="space-y-4">
-              {consultations.length > 0 ? (
-                consultations.map((c) => (
-                  <div
-                    key={c.id}
-                    className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm hover:shadow-md transition-all"
-                  >
-                    <h3 className="font-normal text-slate-900 dark:text-white text-base leading-snug">
-                      {c.name}
-                    </h3>
-                    {c.description && (
-                      <p className="text-xs font-normal text-slate-400 dark:text-zinc-500 mt-1 mb-3">
-                        {c.description}
-                      </p>
-                    )}
-                    <div className="flex gap-2 mt-2">
-                      <Badge className="font-normal bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900">
-                        <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-                        {c.finishedEnum}
-                      </Badge>
-                      <Badge className="font-normal bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-100 dark:border-blue-900">
-                        <User className="w-3.5 h-3.5 mr-1" />
-                        {c.member ? "A'zo" : "Rahbar"}
-                      </Badge>
-                      <Badge className="font-normal bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400 border-red-100 dark:border-red-900">
-                        <Calendar className="w-3.5 h-3.5 mr-1" />
-                        {c.year}
-                      </Badge>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground">
-                  No consultation projects found.
-                </p>
-              )}
-            </TabsContent>
-          </Tabs>
+          {/* Tabs */}
+          <div className="md:col-span-3">
+            {!isAuthenticated ? (
+              <Tabs defaultValue="research">
+                <TabsList className="grid w-full grid-cols-4 bg-muted h-10">
+                  <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
+                  <TabsTrigger value="publications" className="text-xs sm:text-sm">Publications</TabsTrigger>
+                  <TabsTrigger value="awards" className="text-xs sm:text-sm">Awards</TabsTrigger>
+                  <TabsTrigger value="consultations" className="text-xs sm:text-sm">Consults</TabsTrigger>
+                </TabsList>
+                <div className="mt-4">
+                  <TabsContent value="research"><AuthRequired title="Tadqiqot ma'lumotlari" /></TabsContent>
+                  <TabsContent value="publications"><AuthRequired title="Nashrlar" /></TabsContent>
+                  <TabsContent value="awards"><AuthRequired title="Mukofotlar" /></TabsContent>
+                  <TabsContent value="consultations"><AuthRequired title="Maslahat loyihalari" /></TabsContent>
+                </div>
+              </Tabs>
+            ) : (
+              <Tabs defaultValue="research">
+                <TabsList className="grid w-full grid-cols-4 bg-muted h-10">
+                  <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
+                  <TabsTrigger value="publications" className="text-xs sm:text-sm">Publications</TabsTrigger>
+                  <TabsTrigger value="awards" className="text-xs sm:text-sm">Awards</TabsTrigger>
+                  <TabsTrigger value="consultations" className="text-xs sm:text-sm">Consults</TabsTrigger>
+                </TabsList>
+                <div className="mt-4">
+                  <TabsContent value="research"><ResearchTab userId={numId} /></TabsContent>
+                  <TabsContent value="publications"><PublicationsTab userId={numId} /></TabsContent>
+                  <TabsContent value="awards"><AwardsTab userId={numId} /></TabsContent>
+                  <TabsContent value="consultations"><ConsultationsTab userId={numId} /></TabsContent>
+                </div>
+              </Tabs>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-export default function StaffProfilePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  return <StaffProfileContent id={id} />;
+  return <StaffDetail id={id} />;
 }

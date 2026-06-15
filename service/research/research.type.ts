@@ -28,11 +28,11 @@ export interface ResearchDetailResponse {
   data: ResearchDataItem;
 }
 
-// GET /research (Barcha tadqiqotlar ro'yxati) uchun javob
+// GET /research — ResPageable (body ichida array)
 export interface ResearchListResponse {
   success: boolean;
   message: string;
-  data: ResearchDataItem[];
+  data: ResearchPageData;
 }
 
 // GET /research/byUserId/{id} (Foydalanuvchiga tegishli sahifalangan tadqiqotlar) uchun javob

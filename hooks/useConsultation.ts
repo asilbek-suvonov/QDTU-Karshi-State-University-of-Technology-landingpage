@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { consultationService, type ConsultationPageParams } from "@/service/consultation/consultation.service";
+import { getStoredToken } from "@/store/auth.store";
 
 export const consultationKeys = {
   all: ["consultation"] as const,
@@ -13,6 +14,7 @@ export const useGetConsultationPage = (params: ConsultationPageParams = {}) => {
     queryKey: consultationKeys.page(params),
     queryFn: () => consultationService.getPage(params),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 };
 
@@ -29,7 +31,8 @@ export const useGetConsultationsByUser = (userId: string | number, params: Consu
   return useQuery({
     queryKey: consultationKeys.byUser(userId, params),
     queryFn: () => consultationService.getByUser(userId, params),
-    enabled: !!userId,
+    enabled: !!userId && !!getStoredToken(),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 };

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { publicationService, type PublicationPageParams } from "@/service/publication/publication.service";
+import { getStoredToken } from "@/store/auth.store";
 
 export const publicationKeys = {
   all: ["publication"] as const,
@@ -13,6 +14,7 @@ export const useGetPublicationPage = (params: PublicationPageParams = {}) => {
     queryKey: publicationKeys.page(params),
     queryFn: () => publicationService.getPage(params),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 };
 
@@ -29,7 +31,8 @@ export const useGetPublicationsByUser = (userId: string | number, params: Public
   return useQuery({
     queryKey: publicationKeys.byUser(userId, params),
     queryFn: () => publicationService.getByUser(userId, params),
-    enabled: !!userId,
+    enabled: !!userId && !!getStoredToken(),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
 };

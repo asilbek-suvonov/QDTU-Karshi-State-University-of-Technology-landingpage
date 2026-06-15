@@ -2,107 +2,105 @@
 
 import { use } from "react";
 import { notFound } from "next/navigation";
-import { Card, CardContent } from "@/components/ui/card";
 import { GraduationCap, Loader2, Users } from "lucide-react";
-import { UserCard } from "@/components/user-card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { UserCard } from "@/components/user-card";
 import { useGetDepartmentById } from "@/hooks/useDepartment";
 import { useGetUsersByDepartment } from "@/hooks/useUser";
 
-function DepartmentDetailContent({ id }: { id: string }) {
+function DepartmentDetail({ id }: { id: string }) {
   const { data: deptData, isLoading, isError } = useGetDepartmentById(id);
-  const { data: usersData } = useGetUsersByDepartment(id);
+  const { data: usersData, isLoading: usersLoading } = useGetUsersByDepartment(id);
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
-  if (isError || !deptData?.data) {
-    notFound();
-  }
+  if (isError || !deptData?.data) notFound();
 
   const dept = deptData.data;
   const users = usersData?.data ?? [];
 
   const stats = [
-    { title: "Professors", value: dept.countProfessor },
-    { title: "Docents", value: dept.countDotsent },
-    { title: "PhD", value: dept.countPHD },
-    { title: "DSc", value: dept.countDSC },
+    { label: "Professor", value: dept.countProfessor, color: "text-blue-600 dark:text-blue-400" },
+    { label: "Dotsent", value: dept.countDotsent, color: "text-violet-600 dark:text-violet-400" },
+    { label: "PhD", value: dept.countPHD, color: "text-emerald-600 dark:text-emerald-400" },
+    { label: "DSc", value: dept.countDSC, color: "text-amber-600 dark:text-amber-400" },
+    { label: "Boshqa", value: dept.countNull, color: "text-muted-foreground" },
   ];
 
-  const breadcrumbItems = [
+  const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "Directory", href: "/directory" },
-    { label: dept.collegeName, href: "#" },
+    { label: dept.collegeName },
     { label: dept.name },
   ];
 
   return (
-    <div className="container mx-auto px-4 py-10 min-h-screen">
-      <Breadcrumb items={breadcrumbItems} />
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-10">
+        <Breadcrumb items={breadcrumbs} />
 
-      <div className="mt-8 space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">{dept.name}</h1>
-          <p className="text-muted-foreground mt-1">{dept.collegeName}</p>
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-foreground mb-1">{dept.name}</h1>
+          <p className="text-sm text-muted-foreground">{dept.collegeName}</p>
+          <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
+            <Users className="h-4 w-4" />
+            Jami {dept.countUsers} ta o'qituvchi
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Users className="h-4 w-4" />
-          <span>Jami o'qituvchilar: {dept.countUsers}</span>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {stats.map((stat) => (
-            <Card
-              key={stat.title}
-              className="bg-[#1c1c1c] border-zinc-800 shadow-none h-[90px] p-0 rounded-xl"
-            >
-              <CardContent className="p-4 flex flex-col justify-between h-full">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-zinc-400 font-medium">{stat.title}</p>
-                  <GraduationCap className="h-4 w-4 text-zinc-500" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mt-1">{stat.value}</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8">
+          {stats.map((s) => (
+            <Card key={s.label} className="border-border bg-card">
+              <CardContent className="p-4">
+                <p className="text-xs text-muted-foreground">{s.label}</p>
+                <p className={`text-2xl font-bold mt-0.5 ${s.color}`}>{s.value}</p>
               </CardContent>
             </Card>
           ))}
         </div>
-      </div>
 
-      {users.length > 0 && (
-        <section className="mt-12">
-          <h2 className="text-xl font-semibold text-foreground mb-5">
-            O'qituvchilar ({users.length})
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {users.map((user) => (
+        <div>
+          <div className="flex items-center gap-2 mb-5">
+            <GraduationCap className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold text-foreground">
+              O'qituvchilar
+              {users.length > 0 && <span className="ml-2 text-sm font-normal text-muted-foreground">({users.length})</span>}
+            </h2>
+          </div>
+
+          {usersLoading && (
+            <div className="flex justify-center py-10">
+              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {users.map((u) => (
               <UserCard
-                key={user.id}
-                id={user.id}
-                fullName={user.fullName}
-                collegeName={user.collegeName}
-                departmentName={user.departmentName}
-                imgUrl={user.imgUrl}
+                key={u.id}
+                id={u.id}
+                fullName={u.fullName}
+                departmentName={u.departmentName ?? ""}
+                lavozim={u.lavozim}
+                phoneNumber={u.phoneNumber}
+                imgUrl={u.imgUrl}
               />
             ))}
           </div>
-        </section>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
 
-export default function DepartmentDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  return <DepartmentDetailContent id={id} />;
+  return <DepartmentDetail id={id} />;
 }

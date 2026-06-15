@@ -1,75 +1,69 @@
-import { Card, CardContent } from "@/components/ui/card";
+import Link from "next/link";
+import { Phone, BookOpen } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Building2, BookOpen } from "lucide-react";
-import Link from "next/link";
 
 export interface UserCardProps {
   id: number;
   fullName: string;
-  collegeName: string;
   departmentName: string;
+  lavozim?: string;
+  phoneNumber?: string;
   imgUrl: string | null;
 }
 
-export const UserCard = ({
-  id,
-  fullName,
-  collegeName,
-  departmentName,
-  imgUrl,
-}: UserCardProps) => {
-  const initials = fullName
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+export const UserCard = ({ id, fullName, departmentName, lavozim, phoneNumber, imgUrl }: UserCardProps) => {
+  const initials = fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
   return (
-    <Link href={`/directory/staff/${id}`} className="block w-full max-w-sm group">
-      <Card className="w-full overflow-hidden bg-card shadow-lg transition-all duration-300 group-hover:shadow-xl rounded-xl p-0 h-full">
-        <div className="relative h-28 w-full bg-muted">
-          <div className="h-full w-full bg-gradient-to-br from-primary/20 to-primary/10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
-        </div>
+    <Link href={`/directory/staff/${id}`} className="block group">
+      <div className="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-primary/30 group-hover:-translate-y-0.5 h-full">
 
-        <CardContent className="px-6 pt-0 pb-5">
-          <div className="flex items-start gap-4 -mt-14 relative z-10 mb-4">
-            <Avatar className="h-20 w-20 border-4 border-card shadow-sm shrink-0">
-              {imgUrl && (
-                <AvatarImage src={imgUrl} alt={fullName} className="object-cover" />
-              )}
-              <AvatarFallback className="text-lg font-bold bg-muted text-muted-foreground">
+        {/* Banner */}
+        <div className="h-20 w-full bg-gradient-to-br from-blue-500/20 via-violet-500/15 to-pink-500/10 dark:from-blue-500/30 dark:via-violet-500/20 dark:to-pink-500/15" />
+
+        <div className="px-4 pb-4 pt-0">
+          {/* Avatar */}
+          <div className="-mt-8 mb-3">
+            <Avatar className="h-16 w-16 border-4 border-card shadow-md ring-2 ring-primary/10">
+              {imgUrl && <AvatarImage src={imgUrl} alt={fullName} className="object-cover" />}
+              <AvatarFallback className="text-base font-bold bg-gradient-to-br from-blue-500 to-violet-600 text-white">
                 {initials}
               </AvatarFallback>
             </Avatar>
-
-            <div className="pt-3 space-y-1 min-w-0">
-              <h2 className="text-lg font-semibold tracking-tight text-foreground truncate group-hover:text-blue-600 transition-colors">
-                {fullName}
-              </h2>
-              <Badge
-                variant="secondary"
-                className="bg-blue-50 text-blue-700 hover:bg-blue-50 dark:bg-blue-950/50 dark:text-blue-400 dark:hover:bg-blue-950/50 border border-blue-200/60 dark:border-blue-900/50 px-2 py-0.5 rounded-md text-xs font-medium"
-              >
-                {departmentName}
-              </Badge>
-            </div>
           </div>
 
-          <div className="space-y-2.5 pt-2 border-t border-border/60 text-sm text-muted-foreground">
-            <div className="flex items-center gap-3">
-              <Building2 className="h-4 w-4 text-foreground/70 shrink-0" />
-              <span className="truncate">{collegeName}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <BookOpen className="h-4 w-4 text-foreground/70 shrink-0" />
-              <span className="truncate">{departmentName}</span>
-            </div>
+          {/* Name & badge */}
+          <h2 className="text-sm font-semibold leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1.5">
+            {fullName}
+          </h2>
+
+          {lavozim && (
+            <Badge
+              variant="secondary"
+              className="mb-3 text-[11px] px-2 py-0 h-5 bg-blue-50 text-blue-700 border border-blue-200/70 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/50 rounded-full"
+            >
+              {lavozim}
+            </Badge>
+          )}
+
+          {/* Info */}
+          <div className="space-y-1.5 pt-2.5 border-t border-border/50 text-xs text-muted-foreground">
+            {departmentName && (
+              <div className="flex items-center gap-2">
+                <BookOpen className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
+                <span className="truncate">{departmentName}</span>
+              </div>
+            )}
+            {phoneNumber && (
+              <div className="flex items-center gap-2">
+                <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
+                <span className="truncate">{phoneNumber}</span>
+              </div>
+            )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </Link>
   );
 };

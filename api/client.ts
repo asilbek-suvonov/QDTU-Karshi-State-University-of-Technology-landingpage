@@ -8,14 +8,6 @@ import { getStoredToken } from "@/store/auth.store";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://5.189.158.5:8080";
 
-const useUserStore = {
-  getState: () => ({
-    userToken: {
-      accessToken: getStoredToken(),
-    },
-  }),
-};
-
 const clearUserInfoAndToken = () => {
   console.log("Clearing user info and token...");
 };
@@ -37,7 +29,8 @@ class ApiClient {
   private initializeInterceptors() {
     this.instance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token = useUserStore.getState().userToken?.accessToken;
+        // Har bir so'rovda localStorage dan yangi token o'qiymiz
+        const token = getStoredToken();
         if (token && config.headers) {
           config.headers.Authorization = `Bearer ${token}`;
         }

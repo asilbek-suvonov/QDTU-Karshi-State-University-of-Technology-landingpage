@@ -4,27 +4,33 @@ export interface AwardData {
   year: number;
   fileUrl: string;
   userId: number;
-  awardEnum: "Trening_Va_Amaliyot" | string; // Kelishi mumkin bo'lgan boshqa enum qiymatlar uchun string qo'shildi
+  awardEnum: "Trening_Va_Amaliyot" | string;
   memberEnum: "MILLIY" | string;
 }
 
-// Pagination (Sahifalash) uchun umumiy ma'lumotlar tuzilishi
 export interface AwardPageData {
   page: number;
   size: number;
   totalPage: number;
   totalElements: number;
-  body: AwardData[]; // Sahifa ichidagi mukofotlar ro'yxati
+  body: AwardData[];
 }
 
-// 1. GET /award/{id} uchun javob
+// GET /award/{id}
 export interface AwardResponse {
   success: boolean;
   message: string;
   data: AwardData;
 }
 
-// 2. GET /award/byUser/{id} uchun javob
+// GET /award — ResPageable (body ichida array)
+export interface AwardListResponse {
+  success: boolean;
+  message: string;
+  data: AwardPageData;
+}
+
+// GET /award/byUser/{id}
 export interface AwardByUserResponse {
   success: boolean;
   message: string;

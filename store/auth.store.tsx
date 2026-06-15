@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type JSX,
 } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface AuthState {
   token: string | null;
@@ -27,6 +28,7 @@ const AuthContext = createContext<AuthState>({
 
 export function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
   const [token, setToken] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const stored = localStorage.getItem(TOKEN_KEY);
@@ -36,11 +38,14 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const login = (newToken: string) => {
     localStorage.setItem(TOKEN_KEY, newToken);
     setToken(newToken);
+    // Login bo'lganda barcha querylarni qayta yuklash
+    queryClient.invalidateQueries();
   };
 
   const logout = () => {
     localStorage.removeItem(TOKEN_KEY);
     setToken(null);
+    queryClient.invalidateQueries();
   };
 
   const value: AuthState = { token, isAuthenticated: !!token, login, logout };
