@@ -1,18 +1,45 @@
-// 1. Umumiy va yordamchi ob'ektlar tuzilishi
+// GET /teacher/search — sahifalangan natija
 export interface TeacherSearchItem {
   id: number;
   fullName: string;
-  collegeName: string;
+  lavozim: string;
+  email: string;
+  age: number;
+  gender: boolean;
+  orcId: string | null;
+  scopusId: string | null;
+  scienceId: string | null;
+  researcherId: string | null;
+  profession: string | null;
+  imgUrl: string | null;
+  fileUrl: string | null;
+  input: string | null;
+  phoneNumber: string;
   departmentName: string;
 }
 
+export interface TeacherPageData {
+  page: number;
+  size: number;
+  totalPage: number;
+  totalElements: number;
+  body: TeacherSearchItem[];
+}
+
+export interface TeacherSearchResponse {
+  success: boolean;
+  message: string;
+  data: TeacherPageData;
+}
+
+// GET /teacher/{userId}
 export interface TeacherDetailData {
   id: number;
   fullName: string;
   collegeName: string;
   departmentName: string;
-  gender: string;
-  birthDate: string; // YYYY-MM-DD formatida
+  gender: boolean;
+  birthDate: string;
   phone: string;
   scientificDegree: string | null;
   academicTitle: string | null;
@@ -20,20 +47,36 @@ export interface TeacherDetailData {
   imgUrl: string | null;
 }
 
-// ==========================================
-// 2. API Response Interfeyslari
-// ==========================================
-
-// GET /teacher/{userId} uchun javob
 export interface TeacherDetailResponse {
   success: boolean;
   message: string;
   data: TeacherDetailData;
 }
 
-// GET /teacher/search (O'qituvchilarni qidirish) uchun javob
-export interface TeacherSearchResponse {
+// POST /teacher/saveUser & PUT /teacher/update-profile body
+export interface ReqTeacher {
+  id?: number;
+  fullName: string;
+  phoneNumber: string;
+  imgUrl?: string;
+  fileUrl?: string;
+  lavozmId?: number;
+  gender: boolean;
+  password?: string;
+  departmentId: number;
+}
+
+export interface TeacherMutationResponse {
   success: boolean;
   message: string;
-  data: TeacherSearchItem[];
+  data: string;
+}
+
+// Search params
+export interface TeacherSearchParams {
+  name?: string;
+  college?: string;
+  lavozim?: string;
+  page?: number;
+  size?: number;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { /*  */Badge } from "@/components/ui/badge";
 import { SearchInput } from "@/components/ui/search-input";
 import { Calendar, Building, Info, Loader2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";

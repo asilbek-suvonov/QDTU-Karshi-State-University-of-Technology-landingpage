@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import { QueryProvider } from "@/providers/query-provider";
+import { AuthProvider } from "@/store/auth.store";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,18 +35,20 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col selection:bg-foreground selection:text-background">
         <QueryProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
-            <main className="flex-1 relative">
-              {children}
-              <ProgressiveBlur position="bottom" height="100px" className="fixed bottom-0 pointer-events-none" />
-            </main>
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Navbar />
+              <main className="flex-1 relative">
+                {children}
+                <ProgressiveBlur position="bottom" height="100px" className="fixed bottom-0 pointer-events-none" />
+              </main>
+            </ThemeProvider>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

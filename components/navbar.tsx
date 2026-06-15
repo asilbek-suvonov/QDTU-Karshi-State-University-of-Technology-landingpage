@@ -2,6 +2,7 @@
 
 import { NavbarDropdown } from "@/components/navbar-dropdown"
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
+import { AuthDialog } from "@/components/auth-dialog"
 import { cn } from "@/lib/utils"
 import { Menu, X } from "lucide-react"
 import { useTheme } from "next-themes"
@@ -68,6 +69,7 @@ export function Navbar() {
               className="p-2 hover:bg-secondary rounded-full transition-all duration-300"
             />
           </div>
+          <AuthDialog />
           <button 
             className="lg:hidden p-2 text-primary"
             onClick={() => setIsOpen(!isOpen)}
@@ -97,6 +99,9 @@ export function Navbar() {
             ))}
           </div>
           <Link href="/staff-statistics" className="block text-sm font-bold uppercase tracking-widest py-2" onClick={() => setIsOpen(false)}>Statistics</Link>
+          <div className="pt-2 border-t border-border">
+            <AuthDialog />
+          </div>
         </div>
       </div>
     </header>

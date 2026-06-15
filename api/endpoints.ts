@@ -108,3 +108,24 @@ export const GET_ENDPOINTS = {
     getAll: '/action',
   }
 };
+
+export const POST_ENDPOINTS = {
+  auth: {
+    login: '/auth/login',
+  },
+  teacher: {
+    create: '/teacher/saveUser',
+  },
+};
+
+export const PUT_ENDPOINTS = {
+  teacher: {
+    update: '/teacher/update-profile',
+  },
+};
+
+export const DELETE_ENDPOINTS = {
+  teacher: {
+    delete: (userId: string | number) => `/teacher/${userId}`,
+  },
+};

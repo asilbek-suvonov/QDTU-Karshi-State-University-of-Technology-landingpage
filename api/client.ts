@@ -4,13 +4,14 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import { getStoredToken } from "@/store/auth.store";
 
-const BASE_URL = "/api-proxy";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://5.189.158.5:8080";
 
 const useUserStore = {
   getState: () => ({
     userToken: {
-      accessToken: null as string | null,
+      accessToken: getStoredToken(),
     },
   }),
 };
