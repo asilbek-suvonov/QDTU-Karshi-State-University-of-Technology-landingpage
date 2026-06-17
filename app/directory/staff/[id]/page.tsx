@@ -3,11 +3,10 @@
 import { use } from "react";
 import { notFound } from "next/navigation";
 import {
-  Phone, BookOpen, Mail, Loader2, Calendar, Globe,
-  FileText, ExternalLink, CheckCircle2, User, Trophy, FlaskConical, MessageSquare,
+  Phone, BookOpen, Mail, Loader2, Calendar,
+  Globe, Download, CheckCircle2, User, Trophy, FlaskConical, MessageSquare, ExternalLink,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { AuthRequired } from "@/components/auth-required";
@@ -24,34 +23,50 @@ import type { AwardData } from "@/service/award/award.type";
 import type { ConsultationData } from "@/service/consultation/consultation.type";
 import axios from "axios";
 
-// ── Tab components ──────────────────────────────────────────────────────────
+// ── Tab helpers ──────────────────────────────────────────────────────────────
+
+function EmptyTab({ icon: Icon, text }: { icon: React.ElementType; text: string }) {
+  return (
+    <div className="py-12 text-center">
+      <Icon className="mx-auto h-8 w-8 text-muted-foreground/20 mb-3" />
+      <p className="text-sm text-muted-foreground">{text}</p>
+    </div>
+  );
+}
+
+function TabLoader() {
+  return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+}
 
 function ResearchTab({ userId }: { userId: number }) {
   const { data, isLoading, error } = useGetResearchByUser(userId);
   const is403 = axios.isAxiosError(error) && error.response?.status === 403;
   const items: ResearchDataItem[] = data?.data?.body ?? [];
 
-  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (isLoading) return <TabLoader />;
   if (is403) return <AuthRequired title="Tadqiqot ma'lumotlari" />;
-  if (!items.length) return <EmptyState icon={FlaskConical} text="Tadqiqot topilmadi." />;
+  if (!items.length) return <EmptyTab icon={FlaskConical} text="Tadqiqot topilmadi." />;
 
   return (
     <div className="space-y-3">
-      {items.map((r) => (
-        <div key={r.id} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
+      {items.map(r => (
+        <div key={r.id} className="group card-academic p-4">
           <div className="flex items-start justify-between gap-3">
-            <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{r.name}</h3>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">{r.name}</h3>
+              {r.description && <ReadMoreText text={r.description} limit={60} />}
+            </div>
             {r.fileUrl && (
-              <a href={r.fileUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-muted-foreground hover:text-foreground">
-                <FileText className="h-4 w-4" />
+              <a href={r.fileUrl} target="_blank" rel="noopener noreferrer" download
+                className="shrink-0 flex h-7 w-7 items-center justify-center rounded border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors">
+                <Download className="h-3 w-3" />
               </a>
             )}
           </div>
-          {r.description && <ReadMoreText text={r.description} limit={80} />}
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+          <div className="flex gap-2 mt-2">
+            <span className="inline-flex items-center gap-1 text-[11px] border border-border rounded px-2 py-0.5 text-muted-foreground">
               <Calendar className="h-3 w-3" />{r.year}
-            </Badge>
+            </span>
           </div>
         </div>
       ))}
@@ -64,36 +79,32 @@ function PublicationsTab({ userId }: { userId: number }) {
   const is403 = axios.isAxiosError(error) && error.response?.status === 403;
   const items: PublicationData[] = data?.data?.body ?? [];
 
-  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (isLoading) return <TabLoader />;
   if (is403) return <AuthRequired title="Nashrlar" />;
-  if (!items.length) return <EmptyState icon={BookOpen} text="Nashr topilmadi." />;
+  if (!items.length) return <EmptyTab icon={BookOpen} text="Nashr topilmadi." />;
 
   return (
     <div className="space-y-3">
-      {items.map((pub) => (
-        <div key={pub.id} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
+      {items.map(pub => (
+        <div key={pub.id} className="group card-academic p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{pub.name}</h3>
-              <p className="mt-0.5 text-xs text-muted-foreground truncate">{pub.institution}</p>
+              <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">{pub.name}</h3>
+              <p className="text-xs text-muted-foreground mt-0.5 truncate">{pub.institution}</p>
             </div>
             {pub.fileUrl && (
-              <a href={pub.fileUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-muted-foreground hover:text-foreground">
-                <ExternalLink className="h-4 w-4" />
+              <a href={pub.fileUrl} target="_blank" rel="noopener noreferrer"
+                className="shrink-0 text-muted-foreground hover:text-primary transition-colors">
+                <ExternalLink className="h-3.5 w-3.5" />
               </a>
             )}
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+          <div className="flex flex-wrap gap-2 mt-2">
+            <span className="inline-flex items-center gap-1 text-[11px] border border-border rounded px-2 py-0.5 text-muted-foreground">
               <Calendar className="h-3 w-3" />{pub.year}
-            </Badge>
-            <Badge variant="outline" className="text-xs bg-sky-50 text-sky-600 border-sky-100 dark:bg-sky-950/30 dark:text-sky-400 dark:border-sky-900">
-              <Globe className="h-3 w-3 mr-1" />{pub.degree}
-            </Badge>
-            <Badge variant="outline" className="text-xs bg-purple-50 text-purple-600 border-purple-100 dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-900">
-              {pub.author}
-            </Badge>
-            {pub.type && <Badge variant="outline" className="text-xs">{pub.type}</Badge>}
+            </span>
+            <span className="text-[11px] bg-secondary rounded px-2 py-0.5 text-foreground">{pub.degree}</span>
+            <span className="text-[11px] text-muted-foreground/60">{pub.author}</span>
           </div>
         </div>
       ))}
@@ -106,28 +117,21 @@ function AwardsTab({ userId }: { userId: number }) {
   const is403 = axios.isAxiosError(error) && error.response?.status === 403;
   const items: AwardData[] = data?.data?.body ?? [];
 
-  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (isLoading) return <TabLoader />;
   if (is403) return <AuthRequired title="Mukofotlar" />;
-  if (!items.length) return <EmptyState icon={Trophy} text="Mukofot topilmadi." />;
+  if (!items.length) return <EmptyTab icon={Trophy} text="Mukofot topilmadi." />;
 
   return (
     <div className="space-y-3">
       {items.map((a, i) => (
-        <div key={i} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
-          <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{a.name}</h3>
-          {a.description && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{a.description}</p>}
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+        <div key={i} className="group card-academic p-4">
+          <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">{a.name}</h3>
+          {a.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{a.description}</p>}
+          <div className="flex gap-2 mt-2">
+            <span className="inline-flex items-center gap-1 text-[11px] border border-border rounded px-2 py-0.5 text-muted-foreground">
               <Calendar className="h-3 w-3" />{a.year}
-            </Badge>
-            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-900">
-              {a.memberEnum}
-            </Badge>
-            {a.awardEnum && (
-              <Badge variant="outline" className="text-xs bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900">
-                {a.awardEnum.replace(/_/g, " ")}
-              </Badge>
-            )}
+            </span>
+            <span className="text-[11px] bg-secondary rounded px-2 py-0.5 text-foreground">{a.memberEnum}</span>
           </div>
         </div>
       ))}
@@ -140,27 +144,27 @@ function ConsultationsTab({ userId }: { userId: number }) {
   const is403 = axios.isAxiosError(error) && error.response?.status === 403;
   const items: ConsultationData[] = data?.data?.body ?? [];
 
-  if (isLoading) return <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>;
+  if (isLoading) return <TabLoader />;
   if (is403) return <AuthRequired title="Maslahat loyihalari" />;
-  if (!items.length) return <EmptyState icon={MessageSquare} text="Maslahat topilmadi." />;
+  if (!items.length) return <EmptyTab icon={MessageSquare} text="Maslahat topilmadi." />;
 
   return (
     <div className="space-y-3">
-      {items.map((c) => (
-        <div key={c.id} className="group rounded-xl border border-border bg-card p-5 hover:border-primary/30 hover:shadow-sm transition-all">
-          <h3 className="font-medium text-foreground leading-snug group-hover:text-primary transition-colors">{c.name}</h3>
-          {c.leader && <p className="mt-0.5 text-xs text-muted-foreground">Rahbar: {c.leader}</p>}
-          {c.description && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{c.description}</p>}
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Badge variant="outline" className="gap-1 text-xs bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900">
+      {items.map(c => (
+        <div key={c.id} className="group card-academic p-4">
+          <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">{c.name}</h3>
+          {c.leader && <p className="text-xs text-muted-foreground mt-0.5">Rahbar: {c.leader}</p>}
+          {c.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{c.description}</p>}
+          <div className="flex gap-2 mt-2">
+            <span className="inline-flex items-center gap-1 text-[11px] border border-border rounded px-2 py-0.5 text-muted-foreground">
               <CheckCircle2 className="h-3 w-3" />{c.finishedEnum}
-            </Badge>
-            <Badge variant="outline" className="gap-1 text-xs">
+            </span>
+            <span className="inline-flex items-center gap-1 text-[11px] bg-secondary rounded px-2 py-0.5 text-foreground">
               <User className="h-3 w-3" />{c.member ? "A'zo" : "Rahbar"}
-            </Badge>
-            <Badge variant="outline" className="gap-1 text-xs bg-red-50 text-red-600 border-red-100 dark:bg-red-950/30 dark:text-red-400 dark:border-red-900">
+            </span>
+            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
               <Calendar className="h-3 w-3" />{c.year}
-            </Badge>
+            </span>
           </div>
         </div>
       ))}
@@ -168,37 +172,23 @@ function ConsultationsTab({ userId }: { userId: number }) {
   );
 }
 
-function EmptyState({ icon: Icon, text }: { icon: React.ElementType; text: string }) {
-  return (
-    <div className="py-16 text-center">
-      <Icon className="mx-auto h-10 w-10 text-muted-foreground/25 mb-3" />
-      <p className="text-sm text-muted-foreground">{text}</p>
-    </div>
-  );
-}
-
-// ── Main ────────────────────────────────────────────────────────────────────
+// ── Main profile ─────────────────────────────────────────────────────────────
 
 function StaffDetail({ id }: { id: string }) {
   const { staff, isLoading } = useAllStaff();
   const { isAuthenticated } = useAuth();
   const numId = Number(id);
-  const user = staff.find((u) => u.id === numId);
+  const user = staff.find(u => u.id === numId);
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
+    return <div className="flex justify-center min-h-[60vh] items-center"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>;
   }
   if (!user) notFound();
 
-  const initials = user.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
-
+  const initials = user.fullName.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
   const breadcrumbs = [
-    { label: "Home", href: "/" },
-    { label: "Staff", href: "/directory/staff" },
+    { label: "Asosiy", href: "/" },
+    { label: "Xodimlar", href: "/directory/staff" },
     { label: user.fullName },
   ];
 
@@ -207,105 +197,131 @@ function StaffDetail({ id }: { id: string }) {
       <div className="container mx-auto px-4 py-10">
         <Breadcrumb items={breadcrumbs} />
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="md:col-span-1">
-            <div className="sticky top-24 rounded-xl border border-border bg-card overflow-hidden">
-              <div className="h-20 bg-gradient-to-r from-primary/20 to-primary/5" />
-              <div className="px-5 pb-5 -mt-10">
-                <Avatar className="h-20 w-20 border-4 border-card shadow-md mb-3">
-                  {user.imgUrl && <AvatarImage src={user.imgUrl} alt={user.fullName} className="object-cover" />}
-                  <AvatarFallback className="text-xl font-bold">{initials}</AvatarFallback>
-                </Avatar>
+          <div className="lg:col-span-1">
+            <div className="sticky top-24 rounded-lg border border-border bg-card shadow-sm overflow-hidden">
+              {/* Top accent */}
+              <div className="h-1 w-full bg-primary" />
+              <div className="p-5">
+                {/* Avatar */}
+                <div className="flex flex-col items-center text-center mb-5">
+                  <Avatar className="h-24 w-24 rounded-lg border-2 border-border shadow-sm mb-3">
+                    {user.imgUrl && <AvatarImage src={user.imgUrl} alt={user.fullName} className="object-cover" />}
+                    <AvatarFallback className="rounded-lg bg-secondary text-primary font-black text-xl">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <h1 className="font-black text-base text-foreground leading-snug">{user.fullName}</h1>
+                  {user.lavozim && (
+                    <span className="mt-1.5 inline-block text-xs font-bold text-primary bg-primary/8 dark:bg-primary/20 px-2.5 py-0.5 rounded">
+                      {user.lavozim}
+                    </span>
+                  )}
+                </div>
 
-                <h1 className="text-lg font-bold text-foreground leading-tight">{user.fullName}</h1>
-                {user.lavozim && (
-                  <Badge variant="secondary" className="mt-1.5 text-xs bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400 border border-blue-200/60 dark:border-blue-900/50">
-                    {user.lavozim}
-                  </Badge>
-                )}
+                {/* Gold divider */}
+                <div className="divider-gold mx-auto mb-4" />
 
-                <div className="mt-4 space-y-2.5 text-sm text-muted-foreground border-t border-border pt-4">
+                {/* Info */}
+                <div className="space-y-2.5 text-sm">
+                  {user.profession && (
+                    <p className="text-xs text-muted-foreground text-center italic">{user.profession}</p>
+                  )}
                   {user.departmentName && (
-                    <div className="flex items-start gap-2">
-                      <BookOpen className="h-4 w-4 shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <BookOpen className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary/50" />
                       <span>{user.departmentName}</span>
                     </div>
                   )}
                   {user.phoneNumber && (
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 shrink-0" />
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Phone className="h-3.5 w-3.5 shrink-0 text-primary/50" />
                       <span>{user.phoneNumber}</span>
                     </div>
                   )}
                   {user.email && (
-                    <div className="flex items-start gap-2">
-                      <Mail className="h-4 w-4 shrink-0 mt-0.5" />
-                      <span className="truncate">{user.email}</span>
+                    <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                      <Mail className="h-3.5 w-3.5 mt-0.5 shrink-0 text-primary/50" />
+                      <span className="break-all">{user.email}</span>
                     </div>
                   )}
-                  {user.profession && (
-                    <div className="pt-1 border-t border-border">
-                      <p className="text-xs text-muted-foreground/70 mb-0.5">Mutaxassislik</p>
-                      <p className="text-foreground text-sm">{user.profession}</p>
+                  {user.gender !== undefined && (
+                    <div className="text-xs text-muted-foreground">
+                      Jinsi: {user.gender ? "Erkak" : "Ayol"}
                     </div>
                   )}
-                  {user.orcId && (
-                    <div>
-                      <p className="text-xs text-muted-foreground/70 mb-0.5">ORCID</p>
-                      <p className="text-xs font-mono">{user.orcId}</p>
-                    </div>
-                  )}
-                  {user.scopusId && (
-                    <div>
-                      <p className="text-xs text-muted-foreground/70 mb-0.5">Scopus ID</p>
-                      <p className="text-xs font-mono">{user.scopusId}</p>
-                    </div>
-                  )}
-                  {user.scienceId && (
-                    <div>
-                      <p className="text-xs text-muted-foreground/70 mb-0.5">Science ID</p>
-                      <p className="text-xs font-mono">{user.scienceId}</p>
-                    </div>
+                  {user.age > 0 && (
+                    <div className="text-xs text-muted-foreground">Yoshi: {user.age}</div>
                   )}
                 </div>
+
+                {/* Academic IDs */}
+                {(user.orcId || user.scopusId || user.scienceId || user.researcherId) && (
+                  <div className="mt-4 pt-4 border-t border-border space-y-2">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Akademik profil</p>
+                    {user.orcId && (
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <ExternalLink className="h-3 w-3 text-[#5C8A00]" />
+                        <span className="text-muted-foreground">ORCID:</span>
+                        <span className="font-mono text-[10px] truncate">{user.orcId}</span>
+                      </div>
+                    )}
+                    {user.scopusId && (
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <Globe className="h-3 w-3 text-orange-500" />
+                        <span className="text-muted-foreground">Scopus:</span>
+                        <span className="font-mono text-[10px] truncate">{user.scopusId}</span>
+                      </div>
+                    )}
+                    {user.scienceId && (
+                      <div className="flex items-center gap-1.5 text-xs">
+                        <ExternalLink className="h-3 w-3 text-blue-500" />
+                        <span className="text-muted-foreground">Science ID:</span>
+                        <span className="font-mono text-[10px] truncate">{user.scienceId}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
           {/* Tabs */}
-          <div className="md:col-span-3">
-            {!isAuthenticated ? (
-              <Tabs defaultValue="research">
-                <TabsList className="grid w-full grid-cols-4 bg-muted h-10">
-                  <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
-                  <TabsTrigger value="publications" className="text-xs sm:text-sm">Publications</TabsTrigger>
-                  <TabsTrigger value="awards" className="text-xs sm:text-sm">Awards</TabsTrigger>
-                  <TabsTrigger value="consultations" className="text-xs sm:text-sm">Consults</TabsTrigger>
-                </TabsList>
-                <div className="mt-4">
+   
+          <div className="lg:col-span-3">
+            <Tabs defaultValue="research">
+              <TabsList className="grid w-full grid-cols-4 bg-secondary h-10 rounded-lg mb-5">
+                <TabsTrigger value="research" className="text-xs font-semibold data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm">
+                  Tadqiqot
+                </TabsTrigger>
+                <TabsTrigger value="publications" className="text-xs font-semibold data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm">
+                  Nashrlar
+                </TabsTrigger>
+                <TabsTrigger value="awards" className="text-xs font-semibold data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm">
+                  Mukofotlar
+                </TabsTrigger>
+                <TabsTrigger value="consultations" className="text-xs font-semibold data-[state=active]:bg-card data-[state=active]:text-primary data-[state=active]:shadow-sm">
+                  Maslahat
+                </TabsTrigger>
+              </TabsList>
+
+              {!isAuthenticated ? (
+                <>
                   <TabsContent value="research"><AuthRequired title="Tadqiqot ma'lumotlari" /></TabsContent>
                   <TabsContent value="publications"><AuthRequired title="Nashrlar" /></TabsContent>
                   <TabsContent value="awards"><AuthRequired title="Mukofotlar" /></TabsContent>
                   <TabsContent value="consultations"><AuthRequired title="Maslahat loyihalari" /></TabsContent>
-                </div>
-              </Tabs>
-            ) : (
-              <Tabs defaultValue="research">
-                <TabsList className="grid w-full grid-cols-4 bg-muted h-10">
-                  <TabsTrigger value="research" className="text-xs sm:text-sm">Research</TabsTrigger>
-                  <TabsTrigger value="publications" className="text-xs sm:text-sm">Publications</TabsTrigger>
-                  <TabsTrigger value="awards" className="text-xs sm:text-sm">Awards</TabsTrigger>
-                  <TabsTrigger value="consultations" className="text-xs sm:text-sm">Consults</TabsTrigger>
-                </TabsList>
-                <div className="mt-4">
+                </>
+              ) : (
+                <>
                   <TabsContent value="research"><ResearchTab userId={numId} /></TabsContent>
                   <TabsContent value="publications"><PublicationsTab userId={numId} /></TabsContent>
                   <TabsContent value="awards"><AwardsTab userId={numId} /></TabsContent>
                   <TabsContent value="consultations"><ConsultationsTab userId={numId} /></TabsContent>
-                </div>
-              </Tabs>
-            )}
+                </>
+              )}
+            </Tabs>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { Phone, BookOpen } from "lucide-react";
+import { Phone, BookOpen, Mail, ExternalLink } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 
 export interface UserCardProps {
   id: number;
@@ -9,59 +8,94 @@ export interface UserCardProps {
   departmentName: string;
   lavozim?: string;
   phoneNumber?: string;
+  email?: string;
+  profession?: string;
+  orcId?: string | null;
+  scopusId?: string | null;
+  gender?: boolean;
   imgUrl: string | null;
 }
 
-export const UserCard = ({ id, fullName, departmentName, lavozim, phoneNumber, imgUrl }: UserCardProps) => {
-  const initials = fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+export const UserCard = ({
+  id, fullName, departmentName, lavozim, phoneNumber,
+  email, profession, orcId, scopusId, imgUrl,
+}: UserCardProps) => {
+  const initials = fullName.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
   return (
-    <Link href={`/directory/staff/${id}`} className="block group">
-      <div className="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-primary/30 group-hover:-translate-y-0.5 h-full">
+    <Link href={`/directory/staff/${id}`} className="group block h-full">
+      <div className="flex flex-col h-full rounded-lg border border-border bg-card shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/30 overflow-hidden">
 
-        {/* Banner */}
-        <div className="h-20 w-full bg-gradient-to-br from-blue-500/20 via-violet-500/15 to-pink-500/10 dark:from-blue-500/30 dark:via-violet-500/20 dark:to-pink-500/15" />
+        {/* Top color bar */}
+        <div className="h-1 w-full bg-primary shrink-0" />
 
-        <div className="px-4 pb-4 pt-0">
-          {/* Avatar */}
-          <div className="-mt-8 mb-3">
-            <Avatar className="h-16 w-16 border-4 border-card shadow-md ring-2 ring-primary/10">
+        {/* Body */}
+        <div className="flex flex-col flex-1 p-5">
+
+          {/* Avatar + name */}
+          <div className="flex items-start gap-4 mb-4">
+            <Avatar className="h-16 w-16 rounded-lg border border-border shadow-sm shrink-0">
               {imgUrl && <AvatarImage src={imgUrl} alt={fullName} className="object-cover" />}
-              <AvatarFallback className="text-base font-bold bg-gradient-to-br from-blue-500 to-violet-600 text-white">
+              <AvatarFallback className="rounded-lg bg-secondary text-primary font-bold text-base">
                 {initials}
               </AvatarFallback>
             </Avatar>
+
+            <div className="min-w-0 pt-1">
+              <h2 className="font-bold text-base text-foreground leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                {fullName}
+              </h2>
+              {lavozim && (
+                <span className="mt-1 inline-block text-xs font-semibold text-primary/80 bg-primary/8 dark:bg-primary/15 px-2 py-0.5 rounded">
+                  {lavozim}
+                </span>
+              )}
+            </div>
           </div>
 
-          {/* Name & badge */}
-          <h2 className="text-sm font-semibold leading-snug text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1.5">
-            {fullName}
-          </h2>
+          {/* Gold divider */}
+          <div className="w-8 h-0.5 bg-accent mb-4" />
 
-          {lavozim && (
-            <Badge
-              variant="secondary"
-              className="mb-3 text-[11px] px-2 py-0 h-5 bg-blue-50 text-blue-700 border border-blue-200/70 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800/50 rounded-full"
-            >
-              {lavozim}
-            </Badge>
-          )}
-
-          {/* Info */}
-          <div className="space-y-1.5 pt-2.5 border-t border-border/50 text-xs text-muted-foreground">
+          {/* Details */}
+          <div className="space-y-2 flex-1">
+            {profession && (
+              <p className="text-sm text-muted-foreground leading-snug line-clamp-2">{profession}</p>
+            )}
             {departmentName && (
-              <div className="flex items-center gap-2">
-                <BookOpen className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <BookOpen className="h-3.5 w-3.5 shrink-0 text-primary/50" />
                 <span className="truncate">{departmentName}</span>
               </div>
             )}
             {phoneNumber && (
-              <div className="flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Phone className="h-3.5 w-3.5 shrink-0 text-primary/50" />
                 <span className="truncate">{phoneNumber}</span>
               </div>
             )}
+            {email && (
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Mail className="h-3.5 w-3.5 shrink-0 text-primary/50" />
+                <span className="truncate">{email}</span>
+              </div>
+            )}
           </div>
+
+          {/* Academic IDs */}
+          {(orcId || scopusId) && (
+            <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-border/60">
+              {orcId && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[#A6CE39]/10 text-[#5C8A00] dark:text-[#A6CE39] border border-[#A6CE39]/25">
+                  <ExternalLink className="h-2.5 w-2.5" />ORCID
+                </span>
+              )}
+              {scopusId && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+                  <ExternalLink className="h-2.5 w-2.5" />Scopus
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </Link>

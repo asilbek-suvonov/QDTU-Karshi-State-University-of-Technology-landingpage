@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -5,100 +6,144 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --color-background:            var(--background);
+  --color-foreground:            var(--foreground);
+  --color-card:                  var(--card);
+  --color-card-foreground:       var(--card-foreground);
+  --color-popover:               var(--popover);
+  --color-popover-foreground:    var(--popover-foreground);
+  --color-primary:               var(--primary);
+  --color-primary-foreground:    var(--primary-foreground);
+  --color-secondary:             var(--secondary);
+  --color-secondary-foreground:  var(--secondary-foreground);
+  --color-muted:                 var(--muted);
+  --color-muted-foreground:      var(--muted-foreground);
+  --color-accent:                var(--accent);
+  --color-accent-foreground:     var(--accent-foreground);
+  --color-destructive:           var(--destructive);
+  --color-destructive-foreground:var(--destructive-foreground);
+  --color-border:                var(--border);
+  --color-input:                 var(--input);
+  --color-ring:                  var(--ring);
+  --color-chart-1:               var(--chart-1);
+  --color-chart-2:               var(--chart-2);
+  --color-chart-3:               var(--chart-3);
+  --color-chart-4:               var(--chart-4);
+  --color-chart-5:               var(--chart-5);
+  --radius-lg:                   var(--radius);
+  --radius-md:                   calc(var(--radius) - 2px);
+  --radius-sm:                   calc(var(--radius) - 4px);
 }
 
+/* ──────────────────────────────────────
+   Light theme  —  Harvard / Academic
+────────────────────────────────────── */
 :root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(240 10% 3.9%);
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(240 10% 3.9%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(240 10% 3.9%);
-  --primary: hsl(240 5.9% 10%);
-  --primary-foreground: hsl(0 0% 98%);
-  --secondary: hsl(240 4.8% 95.9%);
-  --secondary-foreground: hsl(240 5.9% 10%);
-  --muted: hsl(240 4.8% 95.9%);
-  --muted-foreground: hsl(240 3.8% 46.1%);
-  --accent: hsl(240 4.8% 95.9%);
-  --accent-foreground: hsl(240 5.9% 10%);
-  --destructive: hsl(0 84.2% 60.2%);
-  --destructive-foreground: hsl(0 0% 98%);
-  --border: hsl(240 5.9% 90%);
-  --input: hsl(240 5.9% 90%);
-  --ring: hsl(240 10% 3.9%);
-  --chart-1: hsl(12 76% 61%);
-  --chart-2: hsl(173 58% 39%);
-  --chart-3: hsl(197 37% 24%);
-  --chart-4: hsl(43 74% 66%);
-  --chart-5: hsl(27 87% 67%);
-  --radius: 0.5rem;
+  --background:             #FAF8F3;
+  --foreground:             #1F2937;
+  --card:                   #FFFFFF;
+  --card-foreground:        #1F2937;
+  --popover:                #FFFFFF;
+  --popover-foreground:     #1F2937;
+  --primary:                #0F5257;
+  --primary-foreground:     #FFFFFF;
+  --secondary:              #F3EFE6;
+  --secondary-foreground:   #1F2937;
+  --muted:                  #F3EFE6;
+  --muted-foreground:       #6B7280;
+  --accent:                 #E6CA9F;
+  --accent-foreground:      #1F2937;
+  --destructive:            hsl(0 84% 60%);
+  --destructive-foreground: #FFFFFF;
+  --border:                 #E5E7EB;
+  --input:                  #E5E7EB;
+  --ring:                   #0F5257;
+  --chart-1:                #0F5257;
+  --chart-2:                #E6CA9F;
+  --chart-3:                #2D7D83;
+  --chart-4:                #8B6914;
+  --chart-5:                #5E3B1E;
+  --radius:                 0.5rem;
 }
 
+/* ──────────────────────────────────────
+   Dark theme  —  Deep Academic
+────────────────────────────────────── */
 .dark {
-  --background: hsl(240 10% 3.9%);
-  --foreground: hsl(0 0% 98%);
-  --card: hsl(240 10% 3.9%);
-  --card-foreground: hsl(0 0% 98%);
-  --popover: hsl(240 10% 3.9%);
-  --popover-foreground: hsl(0 0% 98%);
-  --primary: hsl(0 0% 98%);
-  --primary-foreground: hsl(240 5.9% 10%);
-  --secondary: hsl(240 3.7% 15.9%);
-  --secondary-foreground: hsl(0 0% 98%);
-  --muted: hsl(240 3.7% 15.9%);
-  --muted-foreground: hsl(240 5% 64.9%);
-  --accent: hsl(240 3.7% 15.9%);
-  --accent-foreground: hsl(0 0% 98%);
-  --destructive: hsl(0 62.8% 30.6%);
-  --destructive-foreground: hsl(0 0% 98%);
-  --border: hsl(240 3.7% 15.9%);
-  --input: hsl(240 3.7% 15.9%);
-  --ring: hsl(240 4.9% 83.9%);
-  --chart-1: hsl(220 70% 50%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
+  --background:             #001618;
+  --foreground:             #F0EDE6;
+  --card:                   #011E21;
+  --card-foreground:        #F0EDE6;
+  --popover:                #011E21;
+  --popover-foreground:     #F0EDE6;
+  --primary:                #2D9DA5;
+  --primary-foreground:     #001618;
+  --secondary:              #042428;
+  --secondary-foreground:   #F0EDE6;
+  --muted:                  #042428;
+  --muted-foreground:       #9CA3AF;
+  --accent:                 #8B6914;
+  --accent-foreground:      #F0EDE6;
+  --destructive:            hsl(0 63% 31%);
+  --destructive-foreground: #F0EDE6;
+  --border:                 #0A3038;
+  --input:                  #0A3038;
+  --ring:                   #2D9DA5;
+  --chart-1:                #2D9DA5;
+  --chart-2:                #E6CA9F;
+  --chart-3:                #5BBFC7;
+  --chart-4:                #D4A843;
+  --chart-5:                #B07A3E;
 }
 
+/* ──────────────────────────────────────
+   Base
+────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
+  html {
+    font-family: "Source Sans 3", sans-serif;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: "Source Sans 3", sans-serif;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Source Sans 3", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
   .container {
-    max-width: 1500px !important;
+    max-width: 1280px !important;
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+/* ──────────────────────────────────────
+   Utilities
+────────────────────────────────────── */
+@layer utilities {
+  .section-label {
+    @apply text-xs font-bold uppercase tracking-[0.15em] text-primary;
+  }
+
+  .divider-gold {
+    @apply w-12 h-0.5 bg-accent;
+  }
+
+  .card-academic {
+    @apply bg-card border border-border rounded-lg shadow-sm
+           transition-all duration-200
+           hover:shadow-md hover:border-primary/30;
   }
 }

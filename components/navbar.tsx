@@ -1,109 +1,136 @@
-"use client"
+"use client";
 
-import { NavbarDropdown } from "@/components/navbar-dropdown"
-import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
-import { AuthDialog } from "@/components/auth-dialog"
-import { cn } from "@/lib/utils"
-import { Menu, X } from "lucide-react"
-import { useTheme } from "next-themes"
-import Link from "next/link"
-import * as React from "react"
+import { NavbarDropdown } from "@/components/navbar-dropdown";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { AuthDialog } from "@/components/auth-dialog";
+import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
 
 const directoryLinks = [
-  { title: "Faculty", href: "/directory/faculty" },
-  { title: "Staff", href: "/directory/staff" },
-]
-
+  { title: "Fakultetlar", href: "/directory/faculty" },
+  { title: "Xodimlar", href: "/directory/staff" },
+];
 const academicLinks = [
-  { title: "Research", href: "/research" },
-  { title: "Publications", href: "/publications" },
-  { title: "Consultations", href: "/consultations" },
-  { title: "Awards", href: "/awards" },
-]
+  { title: "Tadqiqotlar", href: "/research" },
+  { title: "Nashrlar", href: "/publications" },
+  { title: "Maslahatlar", href: "/consultations" },
+  { title: "Mukofotlar", href: "/awards" },
+];
+
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const pathname = usePathname();
+  const active = pathname === href;
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "text-sm font-medium transition-colors duration-150",
+        active
+          ? "text-primary border-b-2 border-primary pb-0.5"
+          : "text-foreground/70 hover:text-foreground"
+      )}
+    >
+      {children}
+    </Link>
+  );
+}
 
 export function Navbar() {
-  const { theme, setTheme } = useTheme()
-  const [isOpen, setIsOpen] = React.useState(false)
+  const { theme, setTheme } = useTheme();
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between mx-auto px-4">
-        <div className="flex items-center gap-12">
-          <Link href="/" className="flex items-center space-x-3 group">
-           
-            <span className="font-bold text-2xl uppercase tracking-tight text-primary">
-              University
-            </span>
-          </Link>
-          
-          <nav className="hidden lg:flex items-center gap-8">
-            <Link href="/" className="text-sm font-semibold uppercase tracking-wider hover:text-primary transition-colors">
-              Home
-            </Link>
-
-            <NavbarDropdown title="Directory" links={directoryLinks} />
-            <NavbarDropdown title="Academic" links={academicLinks} />
-
-            <Link href="/staff-statistics" className="text-sm font-semibold uppercase tracking-wider hover:text-primary transition-colors">
-              Statistics
-            </Link>
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:block">
-            <NavbarDropdown 
-              title="UZ" 
-              links={[
-                { title: "English", href: "#" },
-                { title: "Русский", href: "#" },
-                { title: "O'zbekcha", href: "#" },
-              ]} 
-            />
-          </div>
-          <div className="border-l border-border pl-4 flex items-center h-8">
-            <AnimatedThemeToggler 
-              theme={theme as "light" | "dark"} 
-              onThemeChange={(t) => setTheme(t)}
-              variant="circle"
-              className="p-2 hover:bg-secondary rounded-full transition-all duration-300"
-            />
-          </div>
+    <header className="sticky top-0 z-50 w-full bg-card border-b border-border">
+      {/* Top utility bar */}
+      <div className="hidden lg:block border-b border-border/60 bg-secondary/40">
+        <div className="container mx-auto px-4 flex items-center justify-end gap-4 h-8">
+          <NavbarDropdown
+            title="UZ"
+            links={[
+              { title: "O'zbekcha", href: "#" },
+              { title: "English", href: "#" },
+              { title: "Русский", href: "#" },
+            ]}
+          />
+          <AnimatedThemeToggler
+            theme={theme as "light" | "dark"}
+            onThemeChange={(t) => setTheme(t)}
+            variant="circle"
+            className="p-1 hover:bg-muted rounded-full transition-colors"
+          />
           <AuthDialog />
-          <button 
-            className="lg:hidden p-2 text-primary"
+        </div>
+      </div>
+
+      {/* Main navbar */}
+      <div className="container mx-auto px-4 flex h-16 items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded bg-primary">
+            <span className="text-lg font-black text-white leading-none">Q</span>
+          </div>
+          <div className="hidden sm:block">
+            <p className="text-base font-bold text-foreground leading-tight tracking-tight">QDTU</p>
+            <p className="text-[10px] text-muted-foreground leading-none tracking-wide uppercase">Qo'qon Davlat Texnika Universiteti</p>
+          </div>
+        </Link>
+
+        {/* Desktop nav */}
+        <nav className="hidden lg:flex items-center gap-7">
+          <NavLink href="/">Asosiy</NavLink>
+          <NavbarDropdown title="Yo'nalishlar" links={directoryLinks} />
+          <NavbarDropdown title="Akademik" links={academicLinks} />
+          <NavLink href="/staff-statistics">Statistika</NavLink>
+        </nav>
+
+        {/* Mobile right */}
+        <div className="flex items-center gap-3 lg:hidden">
+          <AnimatedThemeToggler
+            theme={theme as "light" | "dark"}
+            onThemeChange={(t) => setTheme(t)}
+            variant="circle"
+            className="p-1.5 hover:bg-muted rounded-full transition-colors"
+          />
+          <button
+            className="p-1.5 rounded hover:bg-muted transition-colors"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label="Menu"
           >
-            {isOpen ? <X /> : <Menu />}
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <div className={cn(
-        "lg:hidden absolute top-full left-0 w-full bg-background border-b transition-all duration-300 overflow-hidden",
-        isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+        "lg:hidden border-t border-border bg-card transition-all duration-200 overflow-hidden",
+        isOpen ? "max-h-screen" : "max-h-0"
       )}>
-        <div className="p-4 space-y-4">
-          <Link href="/" className="block text-sm font-bold uppercase tracking-widest py-2" onClick={() => setIsOpen(false)}>Home</Link>
-          <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Directory</p>
-            {directoryLinks.map(link => (
-              <Link key={link.href} href={link.href} className="block text-xs font-bold uppercase py-1 pl-4 border-l border-primary/20" onClick={() => setIsOpen(false)}>{link.title}</Link>
-            ))}
-          </div>
-          <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Academic</p>
-            {academicLinks.map(link => (
-              <Link key={link.href} href={link.href} className="block text-xs font-bold uppercase py-1 pl-4 border-l border-primary/20" onClick={() => setIsOpen(false)}>{link.title}</Link>
-            ))}
-          </div>
-          <Link href="/staff-statistics" className="block text-sm font-bold uppercase tracking-widest py-2" onClick={() => setIsOpen(false)}>Statistics</Link>
-          <div className="pt-2 border-t border-border">
+        <div className="container mx-auto px-4 py-4 space-y-0.5">
+          {[
+            { label: "Asosiy", href: "/" },
+            ...directoryLinks.map(l => ({ label: l.title, href: l.href })),
+            ...academicLinks.map(l => ({ label: l.title, href: l.href })),
+            { label: "Statistika", href: "/staff-statistics" },
+          ].map(item => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="block px-3 py-2.5 rounded text-sm text-foreground/80 hover:text-primary hover:bg-muted transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div className="pt-3 border-t border-border flex items-center gap-3">
             <AuthDialog />
           </div>
         </div>
       </div>
     </header>
-  )
+  );
 }

@@ -90,6 +90,7 @@ export interface ResUser {
   id: number;
   fullName: string;
   lavozim: string;
+  
   email: string;
   age: number;
   gender: boolean;

@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Building2, ChevronRight, Loader2, ArrowUpRight } from "lucide-react";
+import { Building2, ArrowRight, Loader2 } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { PageHeader } from "@/components/page-header";
 import { useGetAllColleges } from "@/hooks/useCollege";
 import type { CollegeListItem } from "@/service/college/college.type";
 
 const breadcrumbs = [
-  { label: "Home", href: "/" },
-  { label: "Directory", href: "/directory" },
-  { label: "Faculty" },
+  { label: "Asosiy", href: "/" },
+  { label: "Yo'nalishlar", href: "/directory" },
+  { label: "Fakultetlar" },
 ];
 
 export default function FacultyPage() {
@@ -20,78 +21,42 @@ export default function FacultyPage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-10">
         <Breadcrumb items={breadcrumbs} />
+        <PageHeader
+          eyebrow="Akademik bo'linmalar"
+          title="Fakultetlar"
+          count={!isLoading ? colleges.length : undefined}
+          icon={Building2}
+        />
 
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 dark:bg-violet-950/40">
-              <Building2 className="h-5 w-5 text-violet-600 dark:text-violet-400" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">Fakultetlar</h1>
-          </div>
-          {colleges.length > 0 && (
-            <p className="text-sm text-muted-foreground ml-[52px]">Jami {colleges.length} ta fakultet</p>
-          )}
-        </div>
+        {isLoading && <div className="flex justify-center py-16"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>}
+        {isError && <p className="text-center text-sm text-destructive py-10">Xatolik yuz berdi.</p>}
 
-        {isLoading && (
-          <div className="flex justify-center py-20">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-          </div>
-        )}
-
-        {isError && (
-          <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6 text-center">
-            <p className="text-sm text-destructive">Ma'lumotlarni yuklashda xatolik.</p>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {colleges.map((college: CollegeListItem) => (
             <Link
               key={college.id}
               href={`/faculties/${college.id}`}
-              className="group relative overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:shadow-lg hover:border-primary/30 flex flex-col"
+              className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/30"
             >
-              <div className="relative h-44 w-full overflow-hidden bg-muted">
+              <div className="h-44 bg-muted overflow-hidden shrink-0">
                 {college.imgUrl ? (
-                  <img
-                    src={college.imgUrl}
-                    alt={college.name}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <img src={college.imgUrl} alt={college.name}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <Building2 className="h-14 w-14 text-muted-foreground/30" />
+                  <div className="flex h-full items-center justify-center bg-secondary">
+                    <Building2 className="h-10 w-10 text-muted-foreground/25" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
               </div>
-
               <div className="flex flex-col flex-1 p-4">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">
-                    {college.name}
-                  </h3>
-                  <ArrowUpRight className="h-4 w-4 text-muted-foreground shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                <div className="w-6 h-0.5 bg-accent mb-2" />
+                <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
+                  {college.name}
+                </h3>
+                <p className="text-xs text-muted-foreground mb-3">{college.departmentCount} kafedra</p>
+                <div className="flex items-center gap-1 text-xs font-semibold text-primary mt-auto">
+                  Batafsil <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                 </div>
-
-                <p className="mt-1 text-xs text-muted-foreground">{college.departmentCount} kafedra</p>
-
-                {college.departmentNames.length > 0 && (
-                  <div className="mt-3 space-y-1.5 flex-1">
-                    {college.departmentNames.slice(0, 3).map((d, i) => (
-                      <div key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <ChevronRight className="h-3 w-3 text-primary/60 shrink-0" />
-                        <span className="truncate">{d}</span>
-                      </div>
-                    ))}
-                    {college.departmentNames.length > 3 && (
-                      <p className="text-xs text-muted-foreground/60 pl-4">
-                        +{college.departmentNames.length - 3} ta yana
-                      </p>
-                    )}
-                  </div>
-                )}
               </div>
             </Link>
           ))}
