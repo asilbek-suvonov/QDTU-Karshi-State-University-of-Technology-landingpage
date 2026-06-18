@@ -15,9 +15,7 @@ export function AuthRequired({ title = "bu bo'lim" }: AuthRequiredProps) {
       </div>
       <h2 className="text-lg font-bold text-foreground mb-2">Kirish talab qilinadi</h2>
       <p className="text-sm text-muted-foreground max-w-xs mb-6">
-        <span className="font-semibold text-foreground">{title}</span>ni
-        ko'rish uchun tizimga kiring.
-      </p>
+        <span className="font-semibold text-foreground">{title}</span>{"ni ko'rish uchun tizimga kiring."}</p>
       <AuthDialog />
     </div>
   );

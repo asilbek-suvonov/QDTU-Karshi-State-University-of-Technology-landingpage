@@ -9,6 +9,8 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
+import Image from "next/image";
+import { Logo } from "@/public";
 
 const directoryLinks = [
   { title: "Fakultetlar", href: "/directory/faculty" },
@@ -45,8 +47,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-card border-b border-border">
-      {/* Top utility bar */}
-      <div className="hidden lg:block border-b border-border/60 bg-secondary/40">
+      <div className="hidden lg:block border-b border-border/60 bg-secondary/100">
         <div className="container mx-auto px-4 flex items-center justify-end gap-4 h-8">
           <NavbarDropdown
             title="UZ"
@@ -70,12 +71,15 @@ export function Navbar() {
       <div className="container mx-auto px-4 flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded bg-primary">
-            <span className="text-lg font-black text-white leading-none">Q</span>
-          </div>
+         <Image 
+         alt=""
+         src={Logo}
+         width={40}
+         height={40}
+         />
           <div className="hidden sm:block">
             <p className="text-base font-bold text-foreground leading-tight tracking-tight">QDTU</p>
-            <p className="text-[10px] text-muted-foreground leading-none tracking-wide uppercase">Qo'qon Davlat Texnika Universiteti</p>
+            <p className="text-[10px] text-muted-foreground leading-none ">{"Qarshi Davlat Texnika Universiteti"}</p>
           </div>
         </Link>
 

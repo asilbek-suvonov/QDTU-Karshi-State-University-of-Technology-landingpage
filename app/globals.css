@@ -44,8 +44,8 @@
   --card:                   #FFFFFF;
   --card-foreground:        #1F2937;
   --popover:                #FFFFFF;
-  --popover-foreground:     #1F2937;
-  --primary:                #0F5257;
+  --popover-foreground:     #27371f;
+  --primary:                #001113;
   --primary-foreground:     #FFFFFF;
   --secondary:              #F3EFE6;
   --secondary-foreground:   #1F2937;
@@ -70,7 +70,7 @@
    Dark theme  —  Deep Academic
 ────────────────────────────────────── */
 .dark {
-  --background:             #001618;
+  --background:             #00090a;
   --foreground:             #F0EDE6;
   --card:                   #011E21;
   --card-foreground:        #F0EDE6;
@@ -78,7 +78,7 @@
   --popover-foreground:     #F0EDE6;
   --primary:                #2D9DA5;
   --primary-foreground:     #001618;
-  --secondary:              #042428;
+  --secondary:              #042428;  
   --secondary-foreground:   #F0EDE6;
   --muted:                  #042428;
   --muted-foreground:       #9CA3AF;

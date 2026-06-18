@@ -34,7 +34,7 @@ export const UserCard = ({
 
           {/* Avatar + name */}
           <div className="flex items-start gap-4 mb-4">
-            <Avatar className="h-16 w-16 rounded-lg border border-border shadow-sm shrink-0">
+            <Avatar className="h-16 w-16 shadow-sm shrink-0">
               {imgUrl && <AvatarImage src={imgUrl} alt={fullName} className="object-cover" />}
               <AvatarFallback className="rounded-lg bg-secondary text-primary font-bold text-base">
                 {initials}

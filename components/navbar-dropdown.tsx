@@ -9,7 +9,7 @@ interface NavbarDropdownProps {
 export function NavbarDropdown({ title, links }: NavbarDropdownProps) {
   return (
     <div className="relative group py-6">
-      <button className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wider hover:text-primary transition-colors cursor-default select-none">
+      <button className="flex items-center gap-1.5 text-sm tracking-wider hover:text-primary transition-colors cursor-default select-none">
         {title} 
         <ChevronDown className="h-3.5 w-3.5 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
       </button>
