@@ -33,65 +33,58 @@ export default function ConsultationsPage() {
   const totalPage = data?.data?.totalPage ?? 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-10 max-w-3xl">
-        <Breadcrumb items={breadcrumbs} />
-        <PageHeader eyebrow="Ilmiy faoliyat" title="Maslahat loyihalari" count={!is403 && total > 0 ? total : undefined} icon={MessageSquare} />
+    <div className="p-4 max-w-3xl mx-auto">
+      <Breadcrumb items={breadcrumbs} />
+      <PageHeader eyebrow="Ilmiy faoliyat" title="Maslahat loyihalari" count={!is403 && total > 0 ? total : undefined} icon={MessageSquare} />
 
-        {is403 ? <AuthRequired title="Maslahat loyihalari" /> : (
-          <>
-            <div className="mb-6">
-              <SearchInput value={search} onChange={v => { setSearch(v); setPage(0); }} placeholder="Nomi yoki rahbar..." />
+      {is403 ? <AuthRequired title="Maslahat loyihalari" /> : (
+        <>
+          <div className="my-4">
+            <SearchInput value={search} onChange={v => { setSearch(v); setPage(0); }} placeholder="Nomi yoki rahbar..." />
+          </div>
+
+          {isLoading && <div className="py-8"><Loader2 className="h-5 w-5 animate-spin" /> Yuklanmoqda...</div>}
+          {isError && !is403 && <p className="text-sm my-4">Xatolik yuz berdi.</p>}
+          {!isLoading && !isError && items.length === 0 && (
+            <div className="py-8">
+              <p className="text-sm">Maslahat topilmadi.</p>
             </div>
+          )}
 
-            {isLoading && <div className="flex justify-center py-14"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>}
-            {isError && !is403 && <p className="text-center text-sm text-destructive py-10">Xatolik yuz berdi.</p>}
-            {!isLoading && !isError && items.length === 0 && (
-              <div className="py-14 text-center">
-                <MessageSquare className="mx-auto h-8 w-8 text-muted-foreground/25 mb-3" />
-                <p className="text-sm text-muted-foreground">Maslahat topilmadi.</p>
-              </div>
-            )}
-
-            <div className="space-y-3">
-              {items.map(c => (
-                <div key={c.id} className="group card-academic p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start gap-2 mb-1">
-                        <span className="mt-1.5 inline-block w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                        <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">{c.name}</h3>
-                      </div>
-                      {c.leader && <p className="text-xs text-muted-foreground pl-3.5">Rahbar: {c.leader}</p>}
-                      {c.description && <p className="text-xs text-muted-foreground line-clamp-2 pl-3.5 mt-0.5">{c.description}</p>}
-                    </div>
-                    {c.fileUrl && (
-                      <a href={c.fileUrl} target="_blank" rel="noopener noreferrer" download
-                        className="shrink-0 flex h-8 w-8 items-center justify-center rounded border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors">
-                        <Download className="h-3.5 w-3.5" />
-                      </a>
-                    )}
+          <div className="space-y-4">
+            {items.map(c => (
+              <div key={c.id} className="border-b pb-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="font-bold text-sm">{c.name}</h3>
+                    {c.leader && <p className="text-xs my-0.5">Rahbar: {c.leader}</p>}
+                    {c.description && <p className="text-xs">{c.description}</p>}
                   </div>
-
-                  <div className="flex flex-wrap gap-2 mt-3 pl-3.5">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold border border-border rounded px-2 py-0.5 text-muted-foreground">
-                      <CheckCircle2 className="h-3 w-3" />{STATUS_LABEL[c.finishedEnum] ?? c.finishedEnum}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-secondary rounded px-2 py-0.5 text-foreground">
-                      <User className="h-3 w-3" />{c.member ? "A'zo" : "Rahbar"}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] border border-border rounded px-2 py-0.5 text-muted-foreground">
-                      <Calendar className="h-3 w-3" />{c.year}
-                    </span>
-                  </div>
+                  {c.fileUrl && (
+                    <a href={c.fileUrl} target="_blank" rel="noopener noreferrer" download className="underline text-xs inline-flex items-center gap-1 shrink-0">
+                      <Download className="h-3.5 w-3.5" /> Yuklab olish
+                    </a>
+                  )}
                 </div>
-              ))}
-            </div>
 
-            {!search && <Pagination page={page} totalPage={totalPage} onPageChange={setPage} className="mt-8" />}
-          </>
-        )}
-      </div>
+                <div className="flex flex-wrap gap-3 mt-2 text-xs text-gray-600">
+                  <span className="inline-flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3" /> {STATUS_LABEL[c.finishedEnum] ?? c.finishedEnum}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <User className="h-3 w-3" /> {c.member ? "A'zo" : "Rahbar"}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar className="h-3 w-3" /> {c.year}-yil
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {!search && <Pagination page={page} totalPage={totalPage} onPageChange={setPage} className="mt-6" />}
+        </>
+      )}
     </div>
   );
 }

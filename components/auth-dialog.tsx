@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { LogIn, LogOut, Loader2, Eye, EyeOff, Phone, Lock } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
@@ -45,10 +45,9 @@ export function AuthDialog() {
         variant="outline"
         size="sm"
         onClick={logout}
-        className="gap-2 border-border text-foreground hover:bg-secondary hover:border-primary/30 text-xs font-semibold"
+        className="text-xs font-semibold rounded-none border-foreground hover:bg-neutral-100"
       >
-        <LogOut className="h-3.5 w-3.5" />
-        <span className="hidden sm:inline">Chiqish</span>
+        Chiqish
       </Button>
     );
   }
@@ -58,69 +57,67 @@ export function AuthDialog() {
       <Button
         size="sm"
         onClick={() => setOpen(true)}
-        className="gap-2 bg-primary text-white hover:bg-primary/90 text-xs font-semibold"
+        className="text-xs font-semibold rounded-none bg-foreground text-background hover:bg-foreground/90"
       >
-        <LogIn className="h-3.5 w-3.5" />
-        <span>Kirish</span>
+        Kirish
       </Button>
 
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setErrorMsg(""); }}>
-        <DialogContent className="sm:max-w-[400px] bg-card border-border">
-          <DialogHeader>
-            <div className="w-8 h-0.5 bg-accent mb-3" />
-            <DialogTitle className="text-xl font-bold text-foreground">Tizimga kirish</DialogTitle>
-            <DialogDescription className="text-muted-foreground text-sm">
-              Telefon raqam va parolingizni kiriting.
+        <DialogContent className="sm:max-w-[360px] bg-background border-foreground rounded-none p-6">
+          <DialogHeader className="space-y-1">
+            <DialogTitle className="text-lg font-bold uppercase tracking-tight">Tizimga kirish</DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              Davom etish uchun ma'lumotlarni kiriting.
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-2">
-            <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-foreground">Telefon</label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                  placeholder="+998901234567"
-                  autoComplete="username"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-md border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition"
-                />
-              </div>
+            <div className="space-y-1">
+              <label className="text-xs uppercase font-bold tracking-wider text-muted-foreground">Telefon</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="+998901234567"
+                autoComplete="username"
+                className="w-full px-3 py-2 border border-foreground bg-background text-sm focus:outline-none placeholder:text-muted-foreground/50"
+              />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-foreground">Parol</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-md border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition"
-                />
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <label className="text-xs uppercase font-bold tracking-wider text-muted-foreground">Parol</label>
                 <button
                   type="button"
                   onClick={() => setShowPassword(p => !p)}
                   tabIndex={-1}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+                  className="text-xs text-muted-foreground hover:text-foreground underline"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? "Yashirish" : "Ko'rsatish"}
                 </button>
               </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+                autoComplete="current-password"
+                className="w-full px-3 py-2 border border-foreground bg-background text-sm focus:outline-none placeholder:text-muted-foreground/50"
+              />
             </div>
 
             {errorMsg && (
-              <p className="text-sm text-destructive bg-destructive/8 px-3 py-2 rounded-md border border-destructive/20">
+              <p className="text-xs text-foreground bg-neutral-100 p-2 border border-foreground font-medium">
                 {errorMsg}
               </p>
             )}
 
-            <Button type="submit" className="w-full bg-primary text-white hover:bg-primary/90" disabled={mutation.isPending}>
-              {mutation.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Kirish...</> : "Kirish"}
+            <Button 
+              type="submit" 
+              className="w-full bg-foreground text-background hover:bg-foreground/90 rounded-none" 
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin inline-block" /> Kirilmoqda...</> : "Kirish"}
             </Button>
           </form>
         </DialogContent>

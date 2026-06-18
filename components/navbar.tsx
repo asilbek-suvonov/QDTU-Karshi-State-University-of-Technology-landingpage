@@ -30,10 +30,10 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
     <Link
       href={href}
       className={cn(
-        "text-sm font-medium transition-colors duration-150",
+        "text-xs font-bold uppercase tracking-wider transition-colors py-1 relative",
         active
-          ? "text-primary border-b-2 border-primary pb-0.5"
-          : "text-foreground/70 hover:text-foreground"
+          ? "text-foreground underline underline-offset-8 decoration-2"
+          : "text-muted-foreground hover:text-foreground"
       )}
     >
       {children}
@@ -46,9 +46,10 @@ export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-card border-b border-border">
-      <div className="hidden lg:block border-b border-border/60 bg-secondary/100">
-        <div className="container mx-auto px-4 flex items-center justify-end gap-4 h-8">
+    <header className="sticky top-0 z-50 w-full border-b border-foreground bg-background text-foreground">
+      {/* Top strip */}
+      <div className="hidden lg:block border-b border-foreground/10 bg-neutral-50 dark:bg-neutral-900/50">
+        <div className="container mx-auto px-4 flex items-center justify-end gap-4 h-9">
           <NavbarDropdown
             title="UZ"
             links={[
@@ -57,12 +58,14 @@ export function Navbar() {
               { title: "Русский", href: "#" },
             ]}
           />
+          <div className="h-4 w-px bg-foreground/10" />
           <AnimatedThemeToggler
             theme={theme as "light" | "dark"}
             onThemeChange={(t) => setTheme(t)}
-            variant="circle"
-            className="p-1 hover:bg-muted rounded-full transition-colors"
+            variant="square"
+            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-none transition-colors"
           />
+          <div className="h-4 w-px bg-foreground/10" />
           <AuthDialog />
         </div>
       </div>
@@ -70,21 +73,26 @@ export function Navbar() {
       {/* Main navbar */}
       <div className="container mx-auto px-4 flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group shrink-0">
-         <Image 
-         alt=""
-         src={Logo}
-         width={40}
-         height={40}
-         />
+        <Link href="/" className="flex items-center gap-3 shrink-0">
+          <div className="grayscale invert-0 dark:invert">
+            <Image 
+              alt="QDTU Logo"
+              src={Logo}
+              width={36}
+              height={36}
+              className="rounded-none"
+            />
+          </div>
           <div className="hidden sm:block">
-            <p className="text-base font-bold text-foreground leading-tight tracking-tight">QDTU</p>
-            <p className="text-[10px] text-muted-foreground leading-none ">{"Qarshi Davlat Texnika Universiteti"}</p>
+            <p className="text-sm font-black uppercase tracking-wider leading-none">QDTU</p>
+            <p className="text-[10px] uppercase tracking-tight text-muted-foreground mt-0.5">
+              Qarshi Davlat Texnika Universiteti
+            </p>
           </div>
         </Link>
-
+            
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center gap-7">
+        <nav className="hidden lg:flex items-center gap-8">
           <NavLink href="/">Asosiy</NavLink>
           <NavbarDropdown title="Yo'nalishlar" links={directoryLinks} />
           <NavbarDropdown title="Akademik" links={academicLinks} />
@@ -92,29 +100,29 @@ export function Navbar() {
         </nav>
 
         {/* Mobile right */}
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <AnimatedThemeToggler
             theme={theme as "light" | "dark"}
             onThemeChange={(t) => setTheme(t)}
-            variant="circle"
-            className="p-1.5 hover:bg-muted rounded-full transition-colors"
+            variant="square"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-none transition-colors"
           />
           <button
-            className="p-1.5 rounded hover:bg-muted transition-colors"
+            className="p-2 border border-foreground/20 rounded-none hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Menu"
           >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       <div className={cn(
-        "lg:hidden border-t border-border bg-card transition-all duration-200 overflow-hidden",
-        isOpen ? "max-h-screen" : "max-h-0"
+        "lg:hidden border-t border-foreground bg-background transition-all duration-200 overflow-hidden",
+        isOpen ? "max-h-screen border-b border-foreground" : "max-h-0"
       )}>
-        <div className="container mx-auto px-4 py-4 space-y-0.5">
+        <div className="container mx-auto px-4 py-3 divide-y divide-foreground/5">
           {[
             { label: "Asosiy", href: "/" },
             ...directoryLinks.map(l => ({ label: l.title, href: l.href })),
@@ -124,13 +132,13 @@ export function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="block px-3 py-2.5 rounded text-sm text-foreground/80 hover:text-primary hover:bg-muted transition-colors"
+              className="block py-3 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {item.label}
             </Link>
           ))}
-          <div className="pt-3 border-t border-border flex items-center gap-3">
+          <div className="pt-4 pb-2 flex items-center gap-3">
             <AuthDialog />
           </div>
         </div>

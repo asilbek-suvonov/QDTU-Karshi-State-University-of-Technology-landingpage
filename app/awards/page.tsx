@@ -29,68 +29,57 @@ export default function AwardsPage() {
   const totalPage = data?.data?.totalPage ?? 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-10 max-w-3xl">
-        <Breadcrumb items={breadcrumbs} />
-        <PageHeader eyebrow="Yutuqlar" title="Mukofotlar va Tan olinishlar" count={!is403 && total > 0 ? total : undefined} icon={Trophy} />
+    <div className="p-4 max-w-3xl mx-auto">
+      <Breadcrumb items={breadcrumbs} />
+      <PageHeader eyebrow="Yutuqlar" title="Mukofotlar va Tan olinishlar" count={!is403 && total > 0 ? total : undefined} icon={Trophy} />
 
-        {is403 ? <AuthRequired title="Mukofotlar" /> : (
-          <>
-            <div className="mb-6">
-              <SearchInput value={search} onChange={v => { setSearch(v); setPage(0); }} placeholder="Nomi yoki tavsif..." />
+      {is403 ? <AuthRequired title="Mukofotlar" /> : (
+        <>
+          <div className="my-4">
+            <SearchInput value={search} onChange={v => { setSearch(v); setPage(0); }} placeholder="Nomi yoki tavsif..." />
+          </div>
+
+          {isLoading && <div className="py-8"><Loader2 className="h-5 w-5 animate-spin" /> Yuklanmoqda...</div>}
+          {isError && !is403 && <p className="text-sm my-4">Xatolik yuz berdi.</p>}
+          {!isLoading && !isError && items.length === 0 && (
+            <div className="py-8">
+              <p className="text-sm">Mukofot topilmadi.</p>
             </div>
+          )}
 
-            {isLoading && <div className="flex justify-center py-14"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>}
-            {isError && !is403 && <p className="text-center text-sm text-destructive py-10">Xatolik yuz berdi.</p>}
-            {!isLoading && !isError && items.length === 0 && (
-              <div className="py-14 text-center">
-                <Trophy className="mx-auto h-8 w-8 text-muted-foreground/25 mb-3" />
-                <p className="text-sm text-muted-foreground">Mukofot topilmadi.</p>
-              </div>
-            )}
-
-            <div className="space-y-3">
-              {items.map((award, idx) => (
-                <div key={idx} className="group card-academic p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start gap-2 mb-1">
-                        <span className="mt-1.5 inline-block w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                        <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors">{award.name}</h3>
-                      </div>
-                      {award.description && (
-                        <p className="text-xs text-muted-foreground line-clamp-2 pl-3.5">{award.description}</p>
-                      )}
-                    </div>
-                    {award.fileUrl && (
-                      <a href={award.fileUrl} target="_blank" rel="noopener noreferrer" download
-                        className="shrink-0 flex h-8 w-8 items-center justify-center rounded border border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors">
-                        <Download className="h-3.5 w-3.5" />
-                      </a>
+          <div className="space-y-4">
+            {items.map((award, idx) => (
+              <div key={idx} className="border-b pb-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="font-bold text-sm">{award.name}</h3>
+                    {award.description && (
+                      <p className="text-xs my-1">{award.description}</p>
                     )}
                   </div>
-
-                  <div className="flex flex-wrap gap-2 mt-3 pl-3.5">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold border border-border rounded px-2 py-0.5 text-muted-foreground">
-                      <Calendar className="h-3 w-3" />{award.year}
-                    </span>
-                    <span className="text-[11px] font-semibold bg-secondary text-foreground rounded px-2 py-0.5">
-                      {award.memberEnum}
-                    </span>
-                    {award.awardEnum && (
-                      <span className="text-[11px] text-muted-foreground/70 bg-secondary rounded px-2 py-0.5">
-                        {award.awardEnum.replace(/_/g, " ")}
-                      </span>
-                    )}
-                  </div>
+                  {award.fileUrl && (
+                    <a href={award.fileUrl} target="_blank" rel="noopener noreferrer" download className="underline text-xs inline-flex items-center gap-1">
+                      <Download className="h-3.5 w-3.5" /> Yuklab olish
+                    </a>
+                  )}
                 </div>
-              ))}
-            </div>
 
-            {!search && <Pagination page={page} totalPage={totalPage} onPageChange={setPage} className="mt-8" />}
-          </>
-        )}
-      </div>
+                <div className="flex flex-wrap gap-3 mt-2 text-xs text-gray-600">
+                  <span className="inline-flex items-center gap-1">
+                    <Calendar className="h-3 w-3" /> {award.year}-yil
+                  </span>
+                  <span>| {award.memberEnum}</span>
+                  {award.awardEnum && (
+                    <span>| {award.awardEnum.replace(/_/g, " ")}</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {!search && <Pagination page={page} totalPage={totalPage} onPageChange={setPage} className="mt-6" />}
+        </>
+      )}
     </div>
   );
 }

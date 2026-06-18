@@ -6,39 +6,36 @@ const breadcrumbs = [{ label: "Asosiy", href: "/" }, { label: "Yo'nalishlar" }];
 
 export default function DirectoryPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-10">
-        <Breadcrumb items={breadcrumbs} />
+    <div className="p-4 max-w-7xl mx-auto">
+      <Breadcrumb items={breadcrumbs} />
 
-        <div className="pb-8 mb-8 border-b border-border">
-          <p className="section-label mb-2">Universitet tuzilmasi</p>
-          <h1 className="text-3xl font-black text-foreground">Yo'nalishlar</h1>
-          <div className="divider-gold mt-3" />
-        </div>
+      {/* Header */}
+      <div className="my-4 pb-4 border-b">
+        <p className="text-xs uppercase">Universitet tuzilmasi</p>
+        <h1 className="text-2xl font-bold">Yo'nalishlar</h1>
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
-          {[
-            { title: "Fakultetlar", desc: "Akademik bo'linmalar va yo'nalishlar", href: "/directory/faculty", icon: Building2 },
-            { title: "Xodimlar", desc: "Professor-o'qituvchilar va ilmiy xodimlar", href: "/directory/staff", icon: Users },
-          ].map(item => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="group flex items-start gap-4 rounded-lg border border-border bg-card p-5 shadow-sm transition-all hover:shadow-md hover:border-primary/30"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-border bg-secondary">
-                <item.icon className="h-5 w-5 text-primary" />
-              </div>
+      {/* Yo'nalishlar ro'yxati */}
+      <div className="space-y-4 max-w-lg mt-6">
+        {[
+          { title: "Fakultetlar", desc: "Akademik bo'linmalar va yo'nalishlar", href: "/directory/faculty", icon: Building2 },
+          { title: "Xodimlar", desc: "Professor-o'qituvchilar va ilmiy xodimlar", href: "/directory/staff", icon: Users },
+        ].map(item => (
+          <div key={item.href} className="border-b pb-4">
+            <div className="flex items-start gap-3">
+              <item.icon className="h-5 w-5 shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-bold text-base text-foreground group-hover:text-primary transition-colors">{item.title}</h2>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
+                  <h2 className="font-bold text-sm">{item.title}</h2>
+                  <Link href={item.href} className="underline text-xs inline-flex items-center gap-1">
+                    O'tish <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
-                <p className="mt-0.5 text-sm text-muted-foreground">{item.desc}</p>
+                <p className="text-xs mt-0.5 text-muted-foreground">{item.desc}</p>
               </div>
-            </Link>
-          ))}
-        </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

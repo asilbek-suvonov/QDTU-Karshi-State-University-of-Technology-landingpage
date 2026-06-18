@@ -18,49 +18,43 @@ export default function FacultyPage() {
   const colleges = data?.data ?? [];
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-10">
-        <Breadcrumb items={breadcrumbs} />
-        <PageHeader
-          eyebrow="Akademik bo'linmalar"
-          title="Fakultetlar"
-          count={!isLoading ? colleges.length : undefined}
-          icon={Building2}
-        />
+    <div className="p-4 max-w-7xl mx-auto">
+      <Breadcrumb items={breadcrumbs} />
+      <PageHeader
+        eyebrow="Akademik bo'linmalar"
+        title="Fakultetlar"
+        count={!isLoading ? colleges.length : undefined}
+        icon={Building2}
+      />
 
-        {isLoading && <div className="flex justify-center py-16"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>}
-        {isError && <p className="text-center text-sm text-destructive py-10">Xatolik yuz berdi.</p>}
+      {isLoading && <div className="py-8"><Loader2 className="h-5 w-5 animate-spin" /> Yuklanmoqda...</div>}
+      {isError && <p className="text-sm my-4">Xatolik yuz berdi.</p>}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {colleges.map((college: CollegeListItem) => (
-            <Link
-              key={college.id}
-              href={`/faculties/${college.id}`}
-              className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all hover:shadow-md hover:border-primary/30"
-            >
-              <div className="h-44 bg-muted overflow-hidden shrink-0">
-                {college.imgUrl ? (
-                  <img src={college.imgUrl} alt={college.name}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                ) : (
-                  <div className="flex h-full items-center justify-center bg-secondary">
-                    <Building2 className="h-10 w-10 text-muted-foreground/25" />
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col flex-1 p-4">
-                <div className="w-6 h-0.5 bg-accent mb-2" />
-                <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
+      <div className="space-y-4">
+        {colleges.map((college: CollegeListItem) => (
+          <div key={college.id} className="border-b pb-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+              
+              {/* Rasm qismi soddalashtirildi, qat'iy o'lchamlar olib tashlandi */}
+              {college.imgUrl && (
+                <div className="w-20 h-20 shrink-0">
+                  <img src={college.imgUrl} alt={college.name} className="h-full w-full object-cover" />
+                </div>
+              )}
+              
+              <div>
+                <h3 className="font-bold text-sm">
                   {college.name}
                 </h3>
-                <p className="text-xs text-muted-foreground mb-3">{college.departmentCount} kafedra</p>
-                <div className="flex items-center gap-1 text-xs font-semibold text-primary mt-auto">
-                  Batafsil <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                </div>
+                <p className="text-xs my-0.5">{college.departmentCount} kafedra</p>
+                <Link href={`/faculties/${college.id}`} className="underline text-xs inline-flex items-center gap-1">
+                  Batafsil <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
-            </Link>
-          ))}
-        </div>
+
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
