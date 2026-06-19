@@ -28,7 +28,7 @@ export interface IlmiyDarajaStatsResponse {
   message: string;
   data: IlmiyDarajaStatsData[]; // Rasmdagi namunada data massiv ko'rinishida kelgan
 }
-
+  
 // GET /ilmiy-daraja/get-ilmiy-daraja-statistika uchun javob
 export interface IlmiyDarajaStatistikaAltResponse {
   success: boolean;

@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
+import { Source_Sans_3 } from "next/font/google"; // 1. Fontni import qilamiz
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { QueryProvider } from "@/providers/query-provider";
 import { AuthProvider } from "@/store/auth.store";
 import Footer from "@/components/footer";
+
+// 2. Font parametrlarini sozlaymiz
+const sourceSans = Source_Sans_3({
+  subsets: ["latin", "cyrillic-ext"], // O'zbek tili uchun kirill/lotin variantlari
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "QDTU — Qo'qon Davlat Texnika Universiteti",
@@ -16,15 +24,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="uz" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-full flex flex-col antialiased">
+      {/* 3. <head> ichidagi eski linklarni butunlay olib tashlaymiz */}
+      <head />
+      {/* 4. Font klassini body'ga qo'shib qo'yamiz */}
+      <body className={`${sourceSans.className} min-h-full flex flex-col antialiased`}>
         <QueryProvider>
           <AuthProvider>
             <ThemeProvider

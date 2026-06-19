@@ -6,120 +6,114 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background:            var(--background);
-  --color-foreground:            var(--foreground);
-  --color-card:                  var(--card);
-  --color-card-foreground:       var(--card-foreground);
-  --color-popover:               var(--popover);
-  --color-popover-foreground:    var(--popover-foreground);
-  --color-primary:               var(--primary);
-  --color-primary-foreground:    var(--primary-foreground);
-  --color-secondary:             var(--secondary);
-  --color-secondary-foreground:  var(--secondary-foreground);
-  --color-muted:                 var(--muted);
-  --color-muted-foreground:      var(--muted-foreground);
-  --color-accent:                var(--accent);
-  --color-accent-foreground:     var(--accent-foreground);
-  --color-destructive:           var(--destructive);
-  --color-destructive-foreground:var(--destructive-foreground);
-  --color-border:                var(--border);
-  --color-input:                 var(--input);
-  --color-ring:                  var(--ring);
-  --color-chart-1:               var(--chart-1);
-  --color-chart-2:               var(--chart-2);
-  --color-chart-3:               var(--chart-3);
-  --color-chart-4:               var(--chart-4);
-  --color-chart-5:               var(--chart-5);
-  --radius-lg:                   var(--radius);
-  --radius-md:                   calc(var(--radius) - 2px);
-  --radius-sm:                   calc(var(--radius) - 4px);
+  /* ── Fontni Tailwind v4 theme tizimiga ulaymiz (Eng muhim joyi) ── */
+  --font-sans:                    "Source Sans 3", sans-serif;
+
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-card:                   var(--card);
+  --color-card-foreground:        var(--card-foreground);
+  --color-popover:                var(--popover);
+  --color-popover-foreground:     var(--popover-foreground);
+  --color-primary:                var(--primary);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-muted:                  var(--muted);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-accent:                 var(--accent);
+  --color-accent-foreground:      var(--accent-foreground);
+  --color-destructive:            var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border:                 var(--border);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+  
+  --radius-lg:                    var(--radius);
+  --radius-md:                    calc(var(--radius) - 2px);
+  --radius-sm:                    calc(var(--radius) - 4px);
 }
 
-/* ──────────────────────────────────────
-   Light theme  —  Harvard / Academic
-────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   Light theme  —  Premium Academic (Oltin rangsiz, toza va qimmat akademizm)
+───────────────────────────────────────────────────────────────────────────── */
 :root {
-  --background:             #FAF8F3;
-  --foreground:             #1F2937;
+  --background:             #F8FAFC; /* O'ta toza, yengil kulrang-ko'k fon */
+  --foreground:             #0F172A; /* Chuqur matn rangi */
   --card:                   #FFFFFF;
-  --card-foreground:        #1F2937;
+  --card-foreground:        #0F172A;
   --popover:                #FFFFFF;
-  --popover-foreground:     #27371f;
-  --primary:                #001113;
+  --popover-foreground:     #0F172A;
+  
+  /* Urg'u rangi: Oltin rang o'rniga nufuzli universitetlarga xos to'q chuqur zumrad rang */
+  --primary:                #0A3C36; 
   --primary-foreground:     #FFFFFF;
-  --secondary:              #F3EFE6;
-  --secondary-foreground:   #1F2937;
-  --muted:                  #F3EFE6;
-  --muted-foreground:       #6B7280;
-  --accent:                 #E6CA9F;
-  --accent-foreground:      #1F2937;
-  --destructive:            hsl(0 84% 60%);
+  
+  --secondary:              #F1F5F9;
+  --secondary-foreground:   #1E293B;
+  --muted:                  #F1F5F9;
+  --muted-foreground:       #64748B;
+  
+  /* Accent qismiga ham oltinsiz, vazmin to'q Slate rang berildi */
+  --accent:                 #334155;
+  --accent-foreground:      #FFFFFF;
+  
+  --destructive:            #991B1B;
   --destructive-foreground: #FFFFFF;
-  --border:                 #E5E7EB;
-  --input:                  #E5E7EB;
-  --ring:                   #0F5257;
-  --chart-1:                #0F5257;
-  --chart-2:                #E6CA9F;
-  --chart-3:                #2D7D83;
-  --chart-4:                #8B6914;
-  --chart-5:                #5E3B1E;
-  --radius:                 0.5rem;
+  --border:                 #E2E8F0;
+  --input:                  #E2E8F0;
+  --ring:                   #0A3C36;
+  --radius:                 0.375rem; /* O'tkirroq burchaklar UI'ni qimmatroq ko'rsatadi */
 }
 
-/* ──────────────────────────────────────
-   Dark theme  —  Deep Academic
-────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────────
+   Dark theme  —  Deep Cyber-Academic
+───────────────────────────────────────────────────────────────────────────── */
 .dark {
-  --background:             #00090a;
-  --foreground:             #F0EDE6;
-  --card:                   #011E21;
-  --card-foreground:        #F0EDE6;
-  --popover:                #011E21;
-  --popover-foreground:     #F0EDE6;
-  --primary:                #2D9DA5;
-  --primary-foreground:     #001618;
-  --secondary:              #042428;  
-  --secondary-foreground:   #F0EDE6;
-  --muted:                  #042428;
-  --muted-foreground:       #9CA3AF;
-  --accent:                 #8B6914;
-  --accent-foreground:      #F0EDE6;
-  --destructive:            hsl(0 63% 31%);
-  --destructive-foreground: #F0EDE6;
-  --border:                 #0A3038;
-  --input:                  #0A3038;
-  --ring:                   #2D9DA5;
-  --chart-1:                #2D9DA5;
-  --chart-2:                #E6CA9F;
-  --chart-3:                #5BBFC7;
-  --chart-4:                #D4A843;
-  --chart-5:                #B07A3E;
+  --background:             #050B0A;
+  --foreground:             #F1F5F9;
+  --card:                   #0D1514;
+  --card-foreground:        #F1F5F9;
+  --popover:                #0D1514;
+  --popover-foreground:     #F1F5F9;
+  
+  --primary:                #2A7E73;
+  --primary-foreground:     #050B0A;
+  
+  --secondary:              #131E1D;
+  --secondary-foreground:   #E2E8F0;
+  --muted:                  #131E1D;
+  --muted-foreground:       #94A3B8;
+  
+  --accent:                 #475569;
+  --accent-foreground:      #F1F5F9;
+  
+  --destructive:            #7F1D1D;
+  --destructive-foreground: #F1F5F9;
+  --border:                 #1E2E2C;
+  --input:                  #1E2E2C;
+  --ring:                   #2A7E73;
 }
 
 /* ──────────────────────────────────────
-   Base
+   Base & Typography
 ────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
 
-  html {
-    font-family: "Source Sans 3", sans-serif;
-  }
-
-  body {
+  html, body {
+    font-family: var(--font-sans); /* O'zgaruvchidan o'qiydi */
     @apply bg-background text-foreground;
-    font-family: "Source Sans 3", sans-serif;
     font-feature-settings: "kern" 1, "liga" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Source Sans 3", sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.015em;
+    font-family: var(--font-sans);
+    @apply font-semibold tracking-tight text-slate-900 dark:text-slate-50;
   }
 
   .container {
@@ -130,20 +124,22 @@
 }
 
 /* ──────────────────────────────────────
-   Utilities
+   Premium Utilities
 ────────────────────────────────────── */
 @layer utilities {
   .section-label {
-    @apply text-xs font-bold uppercase tracking-[0.15em] text-primary;
+    @apply text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground;
   }
 
-  .divider-gold {
-    @apply w-12 h-0.5 bg-accent;
+  /* Eski oltin chiziq o'rniga brend rangidagi minimalist chiziq */
+  .divider-academic {
+    @apply w-8 h-[3px] bg-primary rounded-full;
   }
 
+  /* Toza, yengil va zamonaviy kartochka stili */
   .card-academic {
-    @apply bg-card border border-border rounded-lg shadow-sm
-           transition-all duration-200
-           hover:shadow-md hover:border-primary/30;
+    @apply bg-card border border-[#1E2E2C] rounded-md shadow-[0_1px_3px_rgba(0,0,0,0.02)]
+           transition-all duration-300 ease-out
+           hover:shadow-[0_4px_12px_rgba(0,0,0,0.04)] hover:border-border/80;
   }
 }
